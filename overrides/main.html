@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if config.extra.umami and config.extra.umami.id %}
+  <!-- Umami analytics (privacy-friendly visitor stats) -->
+  <script async src="{{ config.extra.umami.url }}" data-website-id="{{ config.extra.umami.id }}"></script>
+  {% endif %}
+{% endblock %}

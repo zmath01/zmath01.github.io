@@ -1,0 +1,20 @@
+/* Site-wide tweaks (keep minimal). */
+
+/* Slightly narrower content column for long math derivations */
+.md-content__inner {
+  max-width: 52rem;
+}
+
+/* Prevent MathJax SVG overflow on mobile */
+mjx-container[jax="SVG"][display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Estimated reading time under each h1 */
+.reading-time {
+  display: block;
+  margin: -0.3rem 0 1.2rem;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}

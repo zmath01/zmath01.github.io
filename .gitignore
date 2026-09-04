@@ -1,0 +1,23 @@
+# Build output
+site/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Never commit secrets
+*.env
+.env.*
+*.pem
+*.key
+*_token*
+credentials*.json
