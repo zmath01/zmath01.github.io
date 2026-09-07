@@ -11,6 +11,13 @@ mjx-container[jax="SVG"][display="true"] {
   overflow-y: hidden;
 }
 
+/* Giscus comment box — separated from the article above it */
+#giscus-container {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
 /* Estimated reading time under each h1 */
 .reading-time {
   display: block;

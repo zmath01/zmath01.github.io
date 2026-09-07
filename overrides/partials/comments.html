@@ -1,0 +1,32 @@
+{%- set _src  = page.file.src_uri -%}
+{%- set _name = _src.rsplit('/', 1)[-1] -%}
+{#- Comments only on real blog articles. This keeps them off the homepage,
+    项目 / 玩具 and the section indexes (blog/index.md, blog/index.en.md).
+
+    The second condition drops mkdocs-static-i18n's fallback copies: those are
+    machine-generated translations under /en/, and giving them their own comment
+    box would split every post into two disjoint threads (one at /blog/x/, one
+    at /en/blog/x/). A post with a genuine .en.md translation is not a fallback
+    and keeps its own box. -#}
+{%- set _is_post = _src.startswith('blog/') and not _name.startswith('index') -%}
+{%- set _is_translation = page.file.locale != config.theme.language -%}
+
+{%- if _is_post and not _is_translation %}
+<div id="giscus-container">
+  <script src="https://giscus.app/client.js"
+          data-repo="zmath01/zmath01.github.io"
+          data-repo-id="R_kgDOUNP3MA"
+          data-category="Announcements"
+          data-category-id="DIC_kwDOUNP3MM4DFCmb"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="{{ 'zh-CN' if config.theme.language == 'zh' else 'en' }}"
+          crossorigin="anonymous"
+          async>
+  </script>
+</div>
+{%- endif %}

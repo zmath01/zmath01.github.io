@@ -95,6 +95,7 @@ extra_javascript:
   - javascripts/mathjax.js       # MathJax config, must load BEFORE the loader
   - javascripts/mathjax-loader.js
   - javascripts/reading-time.js  # estimated reading time under each h1
+  - javascripts/giscus.js       # comments follow Material's light/dark toggle
 
 extra_css:
   - stylesheets/extra.css
