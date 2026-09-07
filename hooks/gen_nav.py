@@ -46,10 +46,10 @@ def on_config(config, **kwargs):
         blog.append({y: years[y]})
 
     config.nav = [
-        {"首页": "index.md"},
-        {"博客": blog},
-        {"项目": "projects/index.md"},
-        {"玩具": "gadgets/index.md"},
+        {"Home": "index.md"},
+        {"Blog": blog},
+        {"Projects": "projects/index.md"},
+        {"Gadgets": "gadgets/index.md"},
     ]
     return config
 
@@ -75,10 +75,14 @@ def _index_markdown(zh: bool) -> str:
 
 
 def on_page_markdown(markdown, page, config, files):
-    """Auto-generate the blog listing pages (zh + en) at build time."""
+    """Auto-generate the blog listing page at build time.
+
+    `blog/index.md` is the default-locale source. mkdocs-static-i18n also
+    builds a zh fallback from it; we emit Chinese for that locale and English
+    for the default (en) locale.
+    """
     src = page.file.src_path.replace("\\", "/")
     if src == "blog/index.md":
-        return _index_markdown(zh=True)
-    if src == "blog/index.en.md":
-        return _index_markdown(zh=False)
+        locale = getattr(page.file, "locale", None) or "en"
+        return _index_markdown(zh=(locale == "zh"))
     return markdown

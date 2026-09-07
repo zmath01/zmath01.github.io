@@ -2,134 +2,134 @@
 
 ## 1. Overview
 
-// 1. 公理化之难 = 尺度层数之难。可解析尺度窗口从 $\sim 10^{2}$ 扩张到 $\sim 10^{60}$，且层间耦合；单一公理系统无法跨越 micro-meso-macro； **每层需要自己的有效理论（Wilson EFT）+ 连接定理（Hilbert VI problem / Renormalization Group）** 。"越现代越难"不是时代效应，是"需要显式连接的不同尺度层数"在增长。
+// 1. The difficulty of axiomatization = the difficulty of the number of scale layers. The analyzable scale window has expanded from $\sim 10^{2}$ to $\sim 10^{60}$, with inter-layer coupling; a single axiomatic system cannot span micro-meso-macro; **each layer needs its own effective theory (Wilson EFT) + connection theorem (Hilbert VI problem / Renormalization Group)**. "The more modern, the harder" is not a generational effect — it is the growth in the "number of distinct scale layers that must be explicitly connected."
 
-// 2. "线性=便宜"需要三重修正：
+// 2. The claim "linear = cheap" requires a triple correction:
 
-- ( a ) 线性方程 ≠ 低复杂度 —— Schrödinger 线性但模拟是 BQP-hard，Ising 配分函数是 #P-hard；
-- ( b ) 比特便宜 / 原子贵的严格版本是 **Landauer**（擦除付 $kT\ln 2$，复制免费）+ 量子不可克隆定理；
-- ( c ) it-from-qubit / AdS/CFT 给出"引力非线性 = 边界态制备复杂度"的合法数学化（Ryu–Takayanagi 面积=纠缠熵；complexity=action；黑洞=最大复杂度态），**但只在全息背景成立**。
+- ( a ) Linear equations ≠ low complexity — Schrödinger is linear but its simulation is BQP-hard, and the Ising partition function is #P-hard;
+- ( b ) The rigorous version of "bits cheap / atoms expensive" is **Landauer** (erasure costs $kT\ln 2$, copying is free) + the quantum no-cloning theorem;
+- ( c ) it-from-qubit / AdS/CFT provides a legitimate mathematical form of "gravitational non-linearity = boundary state-preparation complexity" (Ryu–Takayanagi area = entanglement entropy; complexity = action; black hole = maximal-complexity state), **but it holds only in holographic settings**.
 
-// 3. 农业 → 贵族 → 理论科学：
+// 3. Agriculture → Aristocracy → Theoretical Science:
 
-- 从狩猎采集社会进入农业社会，人类（平均）"寿命延长？"答案大概率是否定的（古病理学：农业转型常伴随健康恶化；现代长寿是 19–20 世纪事件）。
-- "不平等扩大"有定量证据（Kohler 2017 Gini 随农业上升；犁耕-性别规范 Alesina et al.）。
-- **"周期性来源于贫富差距"有正经模型：Malthus 陷阱 + Goodwin 捕食者-猎物周期** ；
-- **"大平等器"** 就是 Scheidel 的《The Great Leveler》（战争/瘟疫/死亡/崩溃是历史上唯一降 Gini 的力量）；
-- **知识爆炸 vs 寿命极限** = Jones 的 burden of knowledge + de Solla Price + Park 2023 颠覆性下降 + 知识图 percolation **孤岛化**。
+- Transitioning from hunter-gatherer to agricultural society, whether humans on average "lived longer?" — the answer is most likely no (paleopathology: the agricultural transition is often accompanied by health deterioration; modern longevity is a 19th–20th century phenomenon).
+- "Inequality expanded" has quantitative evidence (Kohler 2017: Gini rises with agriculture; plough–gender norms, Alesina et al.).
+- **"Periodicity arises from the wealth gap" has a serious model: the Malthusian trap + Goodwin's predator–prey cycle**;
+- The **"Great Leveler"** is Scheidel's *The Great Leveler* (war/plague/death/collapse are the only forces in history that lower the Gini);
+- **Knowledge explosion vs. lifespan limit** = Jones's burden of knowledge + de Solla Price + Park 2023 disruptive decline + knowledge-graph percolation **islanding**.
 
-物理的线性 vs 非线性
-信息的比特 vs 原子
-经济的剩余闲暇 vs 不平等外部性
-知识的生成 vs 验证 
-—— 是同一条"成本不对称"定律在不同尺度的投影：低熵结构（理论/贵族/秩序/公理）必须在别处付熵（实验/农民/混乱/试错）才能维持；
+Linearity vs. non-linearity in physics
+Bits vs. atoms in information
+Surplus leisure vs. inequality externalities in economics
+Generation vs. verification of knowledge
+— are projections of the same "cost asymmetry" law at different scales: low-entropy structures (theory / aristocracy / order / axioms) must pay entropy elsewhere (experiment / peasants / chaos / trial-and-error) in order to be sustained;
 
-2026 年 AI 第一次让"验证"这个最贵的低熵过程可规模化，代价是我们要开始审计审计者。
+For the first time in 2026, AI has made "verification" — the most expensive low-entropy process — scalable, at the cost that we must now start auditing the auditors.
 
 <!--more-->
 
-## 2. 核心论断的逐条分析
+## 2. Item-by-Item Analysis of the Core Claims
 
-### 2.1 "越现代的理论越难公理化"（假设 1）
+### 2.1 "More modern theories are harder to axiomatize" (Hypothesis 1)
 
-不是"现代=难"，而是"多尺度 + 自由度爆炸 + 非线性 + 奇异极限 + 涌现"。
+It is not "modern = hard", but rather "multi-scale + explosion of degrees of freedom + non-linearity + singular limits + emergence".
 
-现代物理学的真正结构是 Wilson 的 effective field theory（EFT）塔：
+The true structure of modern physics is Wilson's effective field theory (EFT) tower:
 
-理论 = 按尺度组织的等价类，每一层有自己的有效拉氏量；层间连接 = 重整化群流 / 极限定理（Boltzmann–Grad 极限，流体力学极限）。
+Theory = equivalence classes organized by scale, each layer having its own effective Lagrangian; inter-layer connection = renormalization-group flow / limit theorems (Boltzmann–Grad limit, hydrodynamic limit).
 
-QFT 难公理化的精确陈述：
+The precise statement of why QFT is hard to axiomatize:
 
-- 形式微扰论 OK（Feynman 图，重整化有限）；
-- 4D 相互作用 QFT 的非微扰存在性 = 未解（Yang–Mills mass gap，Clay）；
-- 构造性 QFT（Glimm–Jaffe）只在 2D/3D 成功（$\phi^{4}_{3}$）；
-- Haag 定理：相互作用 QFT 不存在 Fock 空间表象 → "朴素公理化"结构性失败。
+- Formal perturbation theory is fine (Feynman diagrams, finite renormalization);
+- Non-perturbative existence of 4D interacting QFT = unsolved (Yang–Mills mass gap, Clay);
+- Constructive QFT (Glimm–Jaffe) succeeds only in 2D/3D ($\phi^{4}_{3}$);
+- Haag's theorem: interacting QFT has no Fock-space representation → "naive axiomatization" fails structurally.
 
-"测量尺度扩大"假设升级为：可解析的尺度窗口（ratio $\ell_{\text{macro}}/\ell_{\text{micro}}$）从农业时代 $\sim 10^{2}$ 扩张到今天 $\sim 10^{60}$（$10^{-35}\,\text{m}$ 到 $10^{26}\,\text{m}$），且各层耦合 → 单一封闭公理系统不可能跨越 micro-meso-macro，每个层次需要自己的有效理论 + 连接定理。Deng–Hani–Ma 正是这条链（Newton → Boltzmann → Euler/NSF）的一个严格连接定理；而 Clay NS 是"方程自身的良定性"，方向相反。两个问题构成现代数学物理的两端：方程从哪来 / 方程是否良定。
+The "measurement scale expands" hypothesis is upgraded to: the analyzable scale window (ratio $\ell_{\text{macro}}/\ell_{\text{micro}}$) has expanded from $\sim 10^{2}$ in the agricultural era to $\sim 10^{60}$ today ($10^{-35}\,\text{m}$ to $10^{26}\,\text{m}$), with inter-layer coupling → a single closed axiomatic system cannot span micro-meso-macro, and each level needs its own effective theory + connection theorem. Deng–Hani–Ma is precisely a rigorous connection theorem for this chain (Newton → Boltzmann → Euler/NSF); whereas the Clay NS problem is about "well-posedness of the equations themselves", pointing in the opposite direction. The two problems constitute the two ends of modern mathematical physics: where the equations come from / whether the equations are well-posed.
 
-### 2.2 "量子化是线性的 / 信息化传播成本低 / GR 非线性 / 原子移动贵"
+### 2.2 "Quantization is linear / information propagation is cheap / GR is non-linear / moving atoms is expensive"
 
-Yau 论述（QM 线性谱分析 vs GR 非线性 PDE），但"线性=便宜"需要三重修正：
+Yau's argument (QM linear spectral analysis vs. GR non-linear PDE), but the claim "linear = cheap" requires a triple correction:
 
-**(1) 线性方程 ≠ 低计算复杂度。** Schrödinger 方程线性，但态空间维数随粒子数指数增长：$2^{n}$ 个振幅。模拟量子多体系统是 BQP-hard（Jordan–Lee–Preskill）；Ising / 配分函数计数是 #P-hard（Barahona；Vertigan–Welsh）。所以"最便宜的方程"描述"最贵的系统"。深度学习的崛起恰恰是"线性代数在规模上取胜"（矩阵乘法、attention 是双线性），但通过组合逼近非线性函数 —— 线性的计算骨架 + 非线性的数据分布。
+**(1) Linear equations ≠ low computational complexity.** The Schrödinger equation is linear, but the dimension of the state space grows exponentially with the number of particles: $2^{n}$ amplitudes. Simulating quantum many-body systems is BQP-hard (Jordan–Lee–Preskill); Ising / partition-function counting is #P-hard (Barahona; Vertigan–Welsh). So the "cheapest equation" describes the "most expensive system." The rise of deep learning is precisely "linear algebra winning at scale" (matrix multiplication, attention is bilinear), yet it approximates non-linear functions through composition — a linear computational skeleton + a non-linear data distribution.
 
-**(2) 比特便宜 / 原子贵的物理学依据：**
+**(2) The physical basis for "bits cheap / atoms expensive":**
 
-- Landauer 原理：擦除 1 bit 至少付 $kT\ln 2$ 能量；复制（传播）没有热力学下界。
-- 量子不可克隆定理：未知量子态不可完美复制 → 只有"经典化"的信息（宏观态 + 纠错）才能免费复制。光纤互联网复制的是经典信息；移动原子 = 必须擦除原位 = 付熵。"信息传播廉价 vs 物质迁移昂贵"有严格的热力学 / 量子信息版本。
+- Landauer's principle: erasing 1 bit costs at least $kT\ln 2$ of energy; copying (propagation) has no thermodynamic lower bound.
+- Quantum no-cloning theorem: an unknown quantum state cannot be perfectly copied → only "classicalized" information (macroscopic state + error correction) can be copied for free. The fiber-optic internet copies classical information; moving an atom = having to erase the original location = paying entropy. "Cheap information propagation vs. expensive matter transport" has a rigorous thermodynamic / quantum-information version.
 
-**(3) it-from-qubit / AdS/CFT：** "非线性引力 = 高计算复杂度？"答案是：在全息对偶的意义上，是。
+**(3) it-from-qubit / AdS/CFT:** "Is non-linear gravity = high computational complexity?" The answer: yes, in the sense of holographic duality.
 
-- 体空间（bulk）几何 ↔ 边界（boundary）纠缠结构（Ryu–Takayanagi：面积=纠缠熵；ER=EPR；张量网络）。
-- 黑洞 = 最大复杂度态（fastest scrambler）；复杂度增长 ~ 作用量（complexity = action/volume，Brown–Susskind，Stanford–Susskind）。
-- "原子的重与难移动（高能量/高复杂度）" ↔ 边界上制备该态所需电路深度 / 资源；
-- "比特传播成本低" ↔ 纠缠 / 信息的传播可以在边界上以多项式代价完成。但要加限定：对偶只在特定背景（AdS 类时空）严格成立，不是普适定理。
+- The bulk geometry ↔ boundary entanglement structure (Ryu–Takayanagi: area = entanglement entropy; ER = EPR; tensor networks).
+- Black hole = maximal-complexity state (fastest scrambler); complexity growth ~ action (complexity = action/volume, Brown–Susskind, Stanford–Susskind).
+- "The heaviness and immovability of atoms (high energy / high complexity)" ↔ the circuit depth / resources required to prepare that state on the boundary;
+- "Low cost of bit propagation" ↔ the propagation of entanglement / information can be accomplished on the boundary at polynomial cost. But a caveat must be added: the duality holds rigorously only in specific backgrounds (AdS-like spacetimes), not as a universal theorem.
 
-### 2.3 农业社会 → 贵族 → 理论数学和理论科学（假设 2，"逆熵"）
+### 2.3 Agricultural Society → Aristocracy → Theoretical Mathematics and Theoretical Science (Hypothesis 2, "Negative Entropy")
 
-逐条检验：
+Examining each point:
 
-**(1) "农业社会平均寿命延长？"** —— 问号是对的，答案大概率是否定的（早期）。古病理学（Cohen & Armelagos 1984；Steckel & Rose 2002）：农业转型常伴随身高下降、营养恶化、传染病上升；旧石器成年预期寿命 ~20–35 岁，新石器 ~ 相当或更低；现代长寿是 19–20 世纪公共卫生 / 工业革命的产物（20 世纪 +30 年）。农业带来的是"人口总量增长（Malthusian）"而非"个体寿命延长"。
+**(1) "Did agricultural society extend average lifespan?"** — The question mark is correct; the answer is most likely no (in the early period). Paleopathology (Cohen & Armelagos 1984; Steckel & Rose 2002): the agricultural transition is often accompanied by declining height, worsening nutrition, and rising infectious disease; Paleolithic adult life expectancy ~20–35 years, Neolithic ~ similar or lower; modern longevity is a product of 19th–20th century public health / the Industrial Revolution (+30 years in the 20th century). What agriculture brought was "total population growth (Malthusian)" rather than "extended individual lifespan."
 
-**(2) "不平等从农业社会扩大"** —— 方向正确且有定量证据：Kohler et al. 2017（Nature）"Greater post-Neolithic wealth disparities in Eurasia"：住房面积 Gini 系数随农业 / 驯化 / 政治复杂化上升。Alesina–Giuliano–Nunn 2013 "On the Origins of Gender Roles: Women and the Plough"：犁耕农业塑造了持续至今的性别规范（女性被排除在田间主力劳力 / 公共领域外）。父权制、奴隶制、种姓制在农业帝国中系统化 → "底层女性与 minority 双重地狱"有广泛史料支持。
+**(2) "Inequality expanded from agricultural society"** — The direction is correct and there is quantitative evidence: Kohler et al. 2017 (Nature) "Greater post-Neolithic wealth disparities in Eurasia": the Gini coefficient of house-floor area rises with agriculture / domestication / political complexity. Alesina–Giuliano–Nunn 2013 "On the Origins of Gender Roles: Women and the Plough": plough agriculture shaped gender norms that persist to this day (women were excluded from field labor / the public sphere). Patriarchy, slavery, and caste were systematized in agricultural empires → "the double hell of lower-class women and minorities" is widely supported by historical sources.
 
-**(3) "理论科学从有闲有钱的少数人开始"** —— 基本成立（Veblen 有闲阶级；古希腊公理化、寺院 / 宫廷学者），但"狩猎采集社会没有理论科学"被 Graeber & Wengrow（2021，The Dawn of Everything）挑战：前农业社会存在复杂社会组织（Göbekli Tepe、太平洋西北、季节性城市），"农业革命 → 等级制"的线性叙事本身是启蒙神话。Sahlins 的"原初丰裕社会"（原始人闲暇多）也削弱"农业=剩余=闲暇"的必要性链。更稳妥的表述：理论科学的出现需要 ( a ) 剩余 / 闲暇 ( b ) 文字与记录 -> "知识的积累" ( c ) 竞争性赞助网络 & 制度化 ；农业极大提高了 (a)(b)，但非充分条件。
+**(3) "Theoretical science began with the few who had leisure and wealth"** — Largely holds (Veblen's leisure class; Greek axiomatization, temple / court scholars), but "hunter-gatherer societies had no theoretical science" is challenged by Graeber & Wengrow (2021, *The Dawn of Everything*): pre-agricultural societies had complex social organization (Göbekli Tepe, the Pacific Northwest, seasonal cities), and the linear narrative "agricultural revolution → hierarchy" is itself an Enlightenment myth. Sahlins's "original affluent society" (primitive peoples enjoying abundant leisure) also weakens the necessary chain "agriculture = surplus = leisure." A safer formulation: the emergence of theoretical science requires (a) surplus / leisure, (b) writing and records → "accumulation of knowledge", (c) competitive patronage networks & institutionalization; agriculture greatly raised (a)(b), but is not a sufficient condition.
 
-**(4) "温室里的线性理论无法应用到非线性实际生产"** —— 这正是创新经济学中 "linear model of innovation"（Bush 1945）的批评；工业革命的实际方向是反的：工匠经验 → 科学（热力学来自蒸汽机，信息论来自电报，计算机科学来自计算机）。Mokyr（2002, The Gifts of Athena）的 $\Omega$（命题性知识 / 理论）vs $\lambda$（处方性知识 / 技艺）模型：增长 = $\Omega$ 与 $\lambda$ 的耦合；第一次工业革命 = Industrial Enlightenment（工匠+文人网络），不是贵族理论的直接应用。Allen（2009）：高工资 + 廉价煤炭 + 工匠试错。所以"1750+ 工业革命源于工匠经验技术"成立（Mokyr/Allen 共识），但"贵族线性理论无用"要弱化为"当时 $\Omega$ 尚未与 $\lambda$ 耦合"。女性被排除在学徒 / 学校之外：制度史属实（行会与大学的性别排除；女性在家庭生产与部分行业仍参与），方向正确、细节有例外。
+**(4) "Linear theories in a hothouse cannot be applied to non-linear real production"** — This is precisely the criticism of the "linear model of innovation" in innovation economics (Bush 1945); the actual direction of the Industrial Revolution was the reverse: craftsman experience → science (thermodynamics came from the steam engine, information theory from the telegraph, computer science from the computer). Mokyr (2002, *The Gifts of Athena*) models $\Omega$ (propositional knowledge / theory) vs. $\lambda$ (prescriptive knowledge / craft): growth = the coupling of $\Omega$ and $\lambda$; the First Industrial Revolution = the Industrial Enlightenment (craftsman + literati networks), not the direct application of aristocratic theory. Allen (2009): high wages + cheap coal + craftsman trial-and-error. So "the post-1750 Industrial Revolution stemmed from craftsman experiential technology" holds (the Mokyr / Allen consensus), but "aristocratic linear theory was useless" must be softened to "at the time $\Omega$ had not yet coupled with $\lambda$." Women's exclusion from apprenticeships / schools: institutionally true (gender exclusion in guilds and universities; women still participated in domestic production and some industries) — the direction is correct, with exceptions in the details.
 
-**(5) "逆熵"** —— Schrödinger / Brillouin 的信息即负熵；贵族阶级可建模为耗散结构（Prigogine）：通过榨取农业剩余维持一个低熵有序子系统（有闲阶级），代价是系统其余部分（农民）的熵产生。这个类比有热力学风味，但作为历史因果律过强。
+**(5) "Negative entropy"** — Schrödinger / Brillouin: information is negative entropy; the aristocratic class can be modeled as a dissipative structure (Prigogine): by extracting the agricultural surplus it sustains a low-entropy ordered subsystem (the leisure class), at the cost of entropy production in the rest of the system (the peasants). This analogy has a thermodynamic flavor, but as a historical causal law it is overstated.
 
-**(6) "周期性来源于贫富差距"** —— 有正经模型：Malthus 陷阱（人口-工资负反馈）；Goodwin（1967）增长周期（就业率与工资份额的 Lotka–Volterra 捕食者-猎物振荡）；Scheidel（2017, The Great Leveler）：历史上 Gini 的下降几乎只由战争 / 革命 / 崩溃 / 瘟疫（大平等器）造成 → 与"所有相对平等时期都通过大平等器实现"完全一致；Piketty $r > g$：无冲击时资本回报 > 增长 → 不平等内生上升。
+**(6) "Periodicity arises from the wealth gap"** — There is a serious model: the Malthusian trap (population–wage negative feedback); Goodwin (1967) growth cycles (the Lotka–Volterra predator–prey oscillation of employment rate and wage share); Scheidel (2017, *The Great Leveler*): historically, Gini declines occurred almost only through war / revolution / collapse / plague (the Great Levelers) → perfectly consistent with "all relatively egalitarian periods were achieved through the Great Levelers"; Piketty $r > g$: absent shocks, the return on capital > growth → inequality rises endogenously.
 
-**(7) "先有结果正义才有程序正义"** —— 哲学史命题（Rawls 的程序正义分类），作为历史概括无定论；可观察到的只是：成文法 / 程序法（汉谟拉比、罗马法）出现于国家形成期，且最早的程序正义恰恰是等级化的（不同阶级不同刑罚）。建议降级为"有待论证的猜想"。
+**(7) "Substantive justice precedes procedural justice"** — A proposition in the history of philosophy (Rawls's classification of procedural justice); as a historical generalization it is undecided; what can be observed is only that written / procedural law (Hammurabi, Roman law) appeared during state formation, and the earliest procedural justice was precisely hierarchical (different punishments for different classes). It is recommended to downgrade this to a "conjecture yet to be argued."
 
-### 2.4 知识爆炸 vs 人类寿命极限；造桥者 vs 拓荒者
+### 2.4 Knowledge Explosion vs. Human Lifespan Limit; Bridge-builders vs. Pioneers
 
-这是最有模型支撑的部分：
+This is the part best supported by models:
 
-**(1) de Solla Price（1963）：** 科学文献指数增长，约 10–15 年翻番；现代论文量 ~ 每代 ×2。
+**(1) de Solla Price (1963):** Scientific literature grows exponentially, roughly doubling every 10–15 years; modern paper volume ~ ×2 per generation.
 
-**(2) Jones（2009, "The Burden of Knowledge and the 'Death of the Renaissance Man'"）：** 知识存量指数增长 + 学习速度恒定 + 寿命有限 → 到达前沿所需时间指数增长 → 研究者被迫专业化，人均前沿产出下降，"文艺复兴人"死亡。
+**(2) Jones (2009, "The Burden of Knowledge and the 'Death of the Renaissance Man'"):** Exponential growth of the knowledge stock + constant learning speed + finite lifespan → the time to reach the frontier grows exponentially → researchers are forced to specialize, per-capita frontier output declines, the "Renaissance man" dies.
 
-形式化：
+Formalized:
 
 $$
 K(t)=K_{0}e^{gt},\qquad T(t)=\frac{K(t)}{c},\qquad \frac{L}{T(t)}\longrightarrow 0
 $$
 
-其中 $c$ 为个体吸收率、$L$ 为寿命，可掌握领域数 $\sim L/T(t)$。"大多数人只关心 renormalization+DL 应用结合的部分，只有有钱有闲的数学物理学家关心 canonical measure in path integral , loop space"正是该模型的个体行为写真（且"有钱有闲"呼应 Veblen：纯好奇心研究是奢侈品）。
+Here $c$ is the individual absorption rate, $L$ is lifespan, and the number of fields one can master is $\sim L/T(t)$. "Most people only care about the part combining renormalization + DL applications, while only the wealthy and leisured mathematical physicists care about canonical measure in path integral, loop space" is precisely a portrait of individual behavior under this model (and "wealthy and leisured" echoes Veblen: pure curiosity-driven research is a luxury).
 
-**(3) Park–Leahy–Funk（2023, Nature）：** "Papers and patents are becoming less disruptive over time" —— 知识爆炸时代，论文的"颠覆性"（disruption index）反而持续下降，巩固性 / 搭桥工作占比上升。→ "造桥者"确实在增加，但"拓荒者"的相对份额在下降；这与"学术孤岛"担忧是同一枚硬币的两面：网络规模 $n$ 增长时，保持连通所需边数 $\sim n\log n$（随机图巨分支阈值），而桥接工作产出若只随 $n$ 线性增长，图必然碎片化。这是 percolation / 网络科学的精确版本：孤岛化 = 知识图低于连通阈值。
+**(3) Park–Leahy–Funk (2023, Nature):** "Papers and patents are becoming less disruptive over time" — in the era of knowledge explosion, the "disruptiveness" of papers (disruption index) actually keeps declining, while consolidating / bridge-building work rises as a share. → "Bridge-builders" are indeed increasing, but the relative share of "pioneers" is declining; this is two sides of the same coin as the worry about "academic islands": as network size $n$ grows, the number of edges needed to stay connected is $\sim n\log n$ (random-graph giant-component threshold), yet if bridge-building output grows only linearly with $n$, the graph necessarily fragments. This is the precise version from percolation / network science: islanding = the knowledge graph falling below the connectivity threshold.
 
-**(4) 知识的生成与传播不同步：** 生成端（研究者 × 算力）超指数；传播端（人读 / 人学）线性；验证端（同行评审）线性且 2026 年已过载（ICML 23,918 投稿，审稿人 30 封邮件才找到一个）。HF 的 2,226 篇自动复现是"验证端"的第一次工业化扩容 —— 但引入新的误差源（83.2% 精确率类指标），即"用错误换覆盖"。
+**(4) Knowledge generation and dissemination are out of sync:** The generation side (researchers × compute) is super-exponential; the dissemination side (human reading / learning) is linear; the verification side (peer review) is linear and already overloaded in 2026 (ICML 23,918 submissions, 30 emails to find one reviewer). HF's 2,226 automatically reproduced papers are the first industrial-scale expansion of the "verification side" — but it introduces a new error source (83.2%-precision-type metrics), i.e., "trading error for coverage."
 
-### 2.5 AI 时代的验证危机（打假 / 复现）
+### 2.5 The Verification Crisis in the AI Era (Detecting Fraud / Reproducibility)
 
-- **统计模型：** 假设检测器精确率 $p=0.832$，特异度 $q$（未知），基础率 $\mathrm{prev}$（论文中真有错的比例，未知），则阳性预测值 $\mathrm{PPV}=\frac{p\cdot\mathrm{prev}}{p\cdot\mathrm{prev}+(1-q)(1-\mathrm{prev})}$。仅报"精确率 83.2%"不足以评估；若 $\mathrm{prev}$ 低（造假率 ~1%），即使 $p$ 高，大量"阳性"也是误报。所以"83.2%"这个数字本身需要上下文 —— 这是对文章引用的一个方法论批评。
+- **Statistical model:** Suppose the detector has precision $p=0.832$, specificity $q$ (unknown), and base rate $\mathrm{prev}$ (the proportion of papers that truly contain errors, unknown); then the positive predictive value is $\mathrm{PPV}=\frac{p\cdot\mathrm{prev}}{p\cdot\mathrm{prev}+(1-q)(1-\mathrm{prev})}$. Reporting only "83.2% precision" is insufficient for evaluation; if $\mathrm{prev}$ is low (fraud rate ~1%), then even with high $p$, many "positives" are false alarms. So the number "83.2%" itself needs context — this is a methodological critique of the article's citation.
 
-- **复现挑战的机制创新：** 声明抽取（claims extraction）→ 自带 agent 复现 → 公开 logbook → 人类裁判把 logbook 的自我评估视为不可信 → 审计可审计（audit the audit）。这是把"程序正义"引入科学验证的第一步：从"信任审稿人"转向"可审计的自动化复现"。
+- **Mechanistic innovation in the reproducibility challenge:** claims extraction → built-in agent reproduction → public logbook → human judges treat the logbook's self-assessment as untrustworthy → auditing the audit. This is the first step in bringing "procedural justice" into scientific verification: shifting from "trusting reviewers" to "auditable automated reproduction."
 
-- **案例：** Jacobian 反例（2026-07-19 发布，07-31 Gao 整理，无同行评审）与 Alpöge 的 $S^{6}$ 复结构手稿（108 页，未验证）正处于"声明已传播、验证未跟上"的状态 —— 质疑（"数论背景的人能 check 复几何吗？"）正是验证危机的日常形态。讽刺的是：Jacobian 反例的几何机制（切线扫掠，Speyer）是"纯数学"的，而验证它需要的 Gröbner 计算是"机械化"的 —— 验证越来越像计算，计算越来越像验证。
+- **Case:** The Jacobian counterexample (released 2026-07-19, compiled by Gao on 07-31, no peer review) and Alpöge's manuscript on a complex structure for $S^{6}$ (108 pages, unverified) are both in a state of "claims already propagated, verification lagging behind" — the doubt ("can someone with a number-theory background check complex geometry?") is precisely the everyday form of the verification crisis. Ironically: the geometric mechanism of the Jacobian counterexample (tangent sweep, Speyer) is "pure mathematics," while the Gröbner-basis computation needed to verify it is "mechanized" — verification increasingly resembles computation, and computation increasingly resembles verification.
 
-## 3. 深层连接（Deep Connections）
+## 3. Deep Connections
 
-统一主线：本文的所有碎片（公理化之难、线性 / 非线性、农业 → 贵族 → 理论、知识爆炸、验证危机、金融化、大平等器）可以被压缩成一条"成本不对称"主线：
+Unifying thread: all the fragments of this article (the difficulty of axiomatization, linear / non-linear, agriculture → aristocracy → theory, knowledge explosion, verification crisis, financialization, the Great Leveler) can be compressed into a single "cost asymmetry" thread:
 
-| 层面 | 成本特征 |
+| Layer | Cost characteristic |
 | :--- | :--- |
-| 信息（比特） | 生成快、复制几乎免费（Landauer 只惩罚擦除）、传播线性 |
-| 物质（原子） | 生成贵、移动贵（擦除付熵）、试错贵 |
-| 理解（人脑） | 吸收率恒定、寿命有限、注意力稀缺（Simon：信息富余→注意力贫乏） |
-| 验证（同行） | 供给线性、需求超指数、2026 年已断裂（ICML 数字） |
+| Information (bits) | Fast generation, copying nearly free (Landauer only penalizes erasure), linear propagation |
+| Matter (atoms) | Expensive generation, expensive movement (erasure pays entropy), expensive trial-and-error |
+| Understanding (human brain) | Constant absorption rate, finite lifespan, scarce attention (Simon: information abundance → attention poverty) |
+| Verification (peers) | Linear supply, super-exponential demand, already broken in 2026 (ICML figures) |
 
-四条成本曲线的失衡产生四个现象：
+The imbalance among these four cost curves produces four phenomena:
 
-1. **公理化之难** = "把物质层的规律写成信息层的公理"需要跨层连接定理（Hilbert VI / RG / EFT），层数越多越难 —— 这是"测量尺度扩大"假设的精确化。
-2. **知识爆炸 vs 寿命极限** = 生成曲线与吸收曲线的剪刀差（Jones burden of knowledge；de Solla Price；Park 的 disruptive decline；percolation 孤岛化）。
-3. **阶级与理论科学** = 剩余（物质盈余）转化为闲暇（信息生产时间）的社会工程；Malthus/Goodwin 周期 = 分配曲线的振荡；Scheidel 大平等器 = 唯一的"熵重置"。
-4. **AI 时代** = 第一次给"验证曲线"扩容（自动复现），但以精度换覆盖，且新误差源本身又进入知识图 —— 验证危机没有消失，只是上移了一层（谁审计审计者）。
+1. **The difficulty of axiomatization** = "writing the laws of the matter layer as axioms of the information layer" requires cross-layer connection theorems (Hilbert VI / RG / EFT); the more layers, the harder — this is the precisification of the "measurement scale expands" hypothesis.
+2. **Knowledge explosion vs. lifespan limit** = the scissors gap between the generation curve and the absorption curve (Jones's burden of knowledge; de Solla Price; Park's disruptive decline; percolation islanding).
+3. **Class and theoretical science** = the social engineering of converting surplus (material abundance) into leisure (information-production time); the Malthus / Goodwin cycle = the oscillation of the distribution curve; Scheidel's Great Leveler = the only "entropy reset."
+4. **The AI era** = the first expansion of the "verification curve" (automated reproduction), but at the cost of trading precision for coverage, and the new error source itself re-enters the knowledge graph — the verification crisis has not disappeared, it has merely moved up one layer (who audits the auditors).
 
-## 附录
+## Appendix
 
 - arXiv abs 2503.01800（Deng–Hani–Ma, Hilbert VI）
 -  https://claymath.org/millennium/Navier-Stokes-Equation/

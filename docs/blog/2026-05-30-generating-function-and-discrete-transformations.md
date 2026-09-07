@@ -1,78 +1,78 @@
 # Generating function and discrete transformations
 
-**生成函数 ( Generating Functions )** 确实可以被视为离散序列的 **Z-变换（Z-Transform）**，而 Z-变换本质上是离散版的 Laplace 变换；当在单位圆上取值时，它又直接对应于离散版的 Fourier 变换（DTFT）。
+**Generating functions (Generating Functions)** can indeed be viewed as the **Z-transform (Z-Transform)** of a discrete sequence, and the Z-transform is essentially the discrete version of the Laplace transform; when evaluated on the unit circle, it directly corresponds to the discrete version of the Fourier transform (DTFT).
 
-可以说：**生成函数 = 离散信号的复频域表示**。
+In other words: **generating function = complex frequency-domain representation of a discrete signal**.
 
 <!--more-->
 
-## 1. 核心对应关系：从时域到复频域
+## 1. Core correspondence: from time domain to complex frequency domain
 
-在信号处理中，我们将离散序列 $a_n$（时域）变换到复频域的过程，与组合数学中构造生成函数的过程在数学形式上是**完全一致**的。
+In signal processing, the process of transforming a discrete sequence $a_n$ (time domain) into the complex frequency domain is mathematically **exactly identical** in form to the process of constructing a generating function in combinatorics.
 
-| 变换名称 | 数学定义 | 变量替换关系 | 物理/数学含义 |
+| Transform name | Mathematical definition | Variable substitution relation | Physical/mathematical meaning |
 | :--- | :--- | :--- | :--- |
-| **普通生成函数 (OGF)** | $A(x) = \sum_{n=0}^{\infty} a_n x^n$ | $x = z^{-1}$ | 离散序列的 Z-变换（变量倒数） |
-| **Z-变换 (Z-Transform)** | $X(z) = \sum_{n=0}^{\infty} x[n] z^{-n}$ | $z = x^{-1}$ | 离散版 Laplace 变换 |
-| **Laplace 变换** | $F(s) = \int_{0}^{\infty} f(t) e^{-st} dt$ | $z = e^{sT}$ | 连续信号复频域分析 |
-| **Fourier 变换 (DTFT)** | $X(e^{i\omega}) = \sum x[n] e^{-i\omega n}$ | $z = e^{i\omega}$ | Z-变换在单位圆上的特例 |
+| **Ordinary generating function (OGF)** | $A(x) = \sum_{n=0}^{\infty} a_n x^n$ | $x = z^{-1}$ | Z-transform of a discrete sequence (reciprocal variable) |
+| **Z-transform (Z-Transform)** | $X(z) = \sum_{n=0}^{\infty} x[n] z^{-n}$ | $z = x^{-1}$ | Discrete version of the Laplace transform |
+| **Laplace transform** | $F(s) = \int_{0}^{\infty} f(t) e^{-st} dt$ | $z = e^{sT}$ | Complex frequency-domain analysis of continuous signals |
+| **Fourier transform (DTFT)** | $X(e^{i\omega}) = \sum x[n] e^{-i\omega n}$ | $z = e^{i\omega}$ | Special case of the Z-transform on the unit circle |
 
-*   **离散 vs 连续**：生成函数处理的是离散数列 $\{a_n\}$（对应离散信号），而 Laplace/Fourier 通常处理连续函数 $f(t)$（对应连续信号）。
-*   **求和 vs 积分**：生成函数使用级数求和 $\sum$，Laplace 使用积分 $\int$。这是离散与连续的根本区别。
+*   **Discrete vs continuous**: Generating functions deal with discrete sequences $\{a_n\}$ (corresponding to discrete signals), whereas Laplace/Fourier typically handle continuous functions $f(t)$ (corresponding to continuous signals).
+*   **Summation vs integration**: Generating functions use series summation $\sum$, while Laplace uses integration $\int$. This is the fundamental distinction between discrete and continuous.
 
-## 2. 具体对应解析
+## 2. Detailed correspondence analysis
 
-### 生成函数 $\leftrightarrow$ Z-变换 (离散 Laplace)
+### Generating function $\leftrightarrow$ Z-transform (discrete Laplace)
 
-*   **形式统一**：
-    *   生成函数：$A(x) = a_0 + a_1 x + a_2 x^2 + \dots$
-    *   Z-变换：$X(z) = x[0] + x[1] z^{-1} + x[2] z^{-2} + \dots$
-    *   只要令 $x = z^{-1}$，两者完全等价。
-*   **物理意义**：
-    *   在控制理论中，$z$ 平面的极点位置决定系统的稳定性（收敛性）。
-    *   在组合数学中，生成函数 $A(x)$ 的**奇点（极点）**位置决定了数列 $a_n$ 的**渐近增长率**（如 $a_n \sim C \cdot \rho^n$）。
-    *   **结论**：分析生成函数的奇点，本质上就是在做离散系统的极点分析。
+*   **Unified form**:
+    *   Generating function: $A(x) = a_0 + a_1 x + a_2 x^2 + \dots$
+    *   Z-transform: $X(z) = x[0] + x[1] z^{-1} + x[2] z^{-2} + \dots$
+    *   As long as we set $x = z^{-1}$, the two are completely equivalent.
+*   **Physical meaning**:
+    *   In control theory, the location of poles in the $z$-plane determines the stability (convergence) of the system.
+    *   In combinatorics, the location of the **singularities (poles)** of the generating function $A(x)$ determines the **asymptotic growth rate** of the sequence $a_n$ (e.g., $a_n \sim C \cdot \rho^n$).
+    *   **Conclusion**: Analyzing the singularities of a generating function is, in essence, performing pole analysis of a discrete system.
 
-### 生成函数 $\leftrightarrow$ Fourier 变换
+### Generating function $\leftrightarrow$ Fourier transform
 
-*   **单位圆上的视角**：
-    *   如果在生成函数 $A(x)$ 中令 $x = e^{-i\omega}$（即在复平面的单位圆上取值），生成函数就变成了序列的**离散时间傅里叶变换 (DTFT)**。
-    *   $A(e^{-i\omega}) = \sum a_n e^{-i n \omega}$。
-*   **应用**：
-    *   在信号处理中，这用于分析信号的**频率成分**。
-    *   在组合数学/数论中，这对应于利用**单位根**（Roots of Unity）来提取数列的特定项（如提取每隔 $k$ 项的和），这正是**离散傅里叶变换 (DFT)** 和 **FFT 算法**的核心原理。
+*   **The perspective on the unit circle**:
+    *   If we set $x = e^{-i\omega}$ in the generating function $A(x)$ (i.e., evaluate it on the unit circle of the complex plane), the generating function becomes the **Discrete-Time Fourier Transform (DTFT)** of the sequence.
+    *   $A(e^{-i\omega}) = \sum a_n e^{-i n \omega}$.
+*   **Applications**:
+    *   In signal processing, this is used to analyze the **frequency components** of a signal.
+    *   In combinatorics/number theory, this corresponds to using **roots of unity** to extract specific terms of a sequence (e.g., extracting the sum of every $k$-th term), which is precisely the core principle of the **Discrete Fourier Transform (DFT)** and the **FFT algorithm**.
 
 
 
-## 3. 运算性质的映射
+## 3. Mapping of operational properties
 
-这种对应关系不仅停留在定义上，运算性质也是完全同构的：
+This correspondence is not limited to definitions; the operational properties are also completely isomorphic:
 
-| 操作 | 生成函数 (组合数学) | Z/Fourier 变换 (信号处理) | 直观解释 |
+| Operation | Generating function (combinatorics) | Z/Fourier transform (signal processing) | Intuitive explanation |
 | :--- | :--- | :--- | :--- |
-| **卷积** | $C(x) = A(x) \cdot B(x)$ $\implies c_n = \sum a_k b_{n-k}$ | 时域卷积 $\leftrightarrow$ 频域相乘 | 多项式乘法即卷积 |
-| **位移/延迟** | $x^k A(x)$ (系数右移) | $z^{-k} X(z)$ (时间延迟) | 乘以幂次对应时间平移 |
-| **微分** | $x A'(x)$ (产生 $n \cdot a_n$) | 频域微分 (对应时域乘 $n$) | 加权操作 |
-| **初始值** | $A(0) = a_0$ | 初值定理 $\lim_{z\to\infty} X(z) = x[0]$ | 起点确定 |
+| **Convolution** | $C(x) = A(x) \cdot B(x)$ $\implies c_n = \sum a_k b_{n-k}$ | Time-domain convolution $\leftrightarrow$ frequency-domain multiplication | Polynomial multiplication is convolution |
+| **Shift/delay** | $x^k A(x)$ (coefficients shifted right) | $z^{-k} X(z)$ (time delay) | Multiplying by a power corresponds to a time shift |
+| **Differentiation** | $x A'(x)$ (yields $n \cdot a_n$) | Frequency-domain differentiation (corresponds to multiplying by $n$ in time domain) | Weighted operation |
+| **Initial value** | $A(0) = a_0$ | Initial value theorem $\lim_{z\to\infty} X(z) = x[0]$ | Determines the starting value |
 
-## 4. 为什么这种视角很有用？
+## 4. Why is this perspective useful?
 
-将生成函数视为“离散傅里叶/Laplace 变换”不仅仅是类比，它提供了强大的解题工具：
+Viewing generating functions as "discrete Fourier/Laplace transforms" is more than an analogy; it provides powerful problem-solving tools:
 
-1.  **渐近分析 (Asymptotics)**：
-    利用复变函数论（解析组合学），通过研究生成函数在复平面上的**奇点分布**（类似控制理论的极点分析），可以直接得出 $a_n$ 当 $n \to \infty$ 时的增长行为。这是分析算法复杂度的高级方法。
+1.  **Asymptotic analysis (Asymptotics)**:
+    Using complex analysis (analytic combinatorics), by studying the **distribution of singularities** of the generating function in the complex plane (similar to pole analysis in control theory), one can directly obtain the growth behavior of $a_n$ as $n \to \infty$. This is an advanced method for analyzing algorithmic complexity.
 
-2.  **快速算法 (FFT)**：
-    多项式乘法（生成函数相乘）如果直接算是 $O(n^2)$，但利用“生成函数即频域信号”的观点，使用 **FFT** 可以在 $O(n \log n)$ 时间内完成。这本质上是先在“频域”（点值表示）相乘，再逆变换回“时域”（系数表示）。
+2.  **Fast algorithms (FFT)**:
+    Polynomial multiplication (multiplying generating functions) is naively $O(n^2)$, but using the viewpoint that "a generating function is a frequency-domain signal," **FFT** can accomplish it in $O(n \log n)$ time. This is essentially multiplying first in the "frequency domain" (point-value representation), then inverse-transforming back to the "time domain" (coefficient representation).
 
-3.  **通项公式求解**：
-    利用部分分式分解（Partial Fraction Decomposition），将复杂的生成函数拆解为简单的 $\frac{1}{1-ax}$ 形式，这对应于信号处理中将系统分解为一阶子系统的并联。
+3.  **Solving for closed-form formulas**:
+    Using partial fraction decomposition, a complex generating function is broken down into the simple form $\frac{1}{1-ax}$, which corresponds to decomposing a system into a parallel connection of first-order subsystems in signal processing.
 
-## 总结
+## Summary
 
-*   **生成函数** 就是离散序列的 **Z-变换**（变量记号不同，$x$ vs $z^{-1}$）。
-*   **Z-变换** 是离散版的 **Laplace 变换**。
-*   在单位圆上，它退化为离散版的 **Fourier 变换**。
+*   The **generating function** is the **Z-transform** of a discrete sequence (with different variable notation, $x$ vs $z^{-1}$).
+*   The **Z-transform** is the discrete version of the **Laplace transform**.
+*   On the unit circle, it reduces to the discrete version of the **Fourier transform**.
 
-**本质**：它们都是将**时域/序列域**的复杂卷积运算，转化为**复频域/变换域**的简单乘法运算。组合数学家和信号工程师其实是在用不同的语言描述同一个数学结构。
+**Essence**: They all transform the complex convolution operation in the **time/sequence domain** into a simple multiplication operation in the **complex frequency/transform domain**. Combinatorialists and signal engineers are essentially describing the same mathematical structure in different languages.
 

@@ -1,88 +1,91 @@
 # Generating function and eigenvalue
 
-1.  **生成函数 $\leftrightarrow$ 矩阵特征值**：**正确**。生成函数的**极点（奇点）**直接对应转移矩阵的**特征值**。
-2.  **傅立叶级数正交性 $\leftrightarrow$ 斐波那契矩阵**：**不完全适用**。虽然傅立叶变换基于**正交/酉矩阵**（$U^T = U^{-1}$），但斐波那契的转移矩阵（Q-矩阵）**不是**正交或酉矩阵，因此不能直接利用“转置等于逆”这一性质来简化计算。
+1.  **Generating function $\leftrightarrow$ matrix eigenvalue**: **Correct**. The **poles (singularities)** of the generating function directly correspond to the **eigenvalues** of the transition matrix.
+2.  **Fourier series orthogonality $\leftrightarrow$ Fibonacci matrix**: **Not fully applicable**. Although the Fourier transform is based on **orthogonal/unitary matrices** ($U^T = U^{-1}$), the Fibonacci transition matrix (Q-matrix) is **not** an orthogonal or unitary matrix, so we cannot directly exploit the property "transpose equals inverse" to simplify the computation.
 
 <!--more-->
 
 ---
 
-## 1. 生成函数与特征值的本质联系
+## 1. The essential connection between generating functions and eigenvalues
 
-生成函数法和矩阵特征值法本质上是**同一数学结构的两种不同表达**。
+The generating function method and the matrix eigenvalue method are essentially **two different expressions of the same mathematical structure**.
 
-### 数学对应关系
-对于斐波那契数列 $F_n = F_{n-1} + F_{n-2}$：
+### Mathematical correspondence
 
-*   **生成函数视角**：
-    生成函数为 $G(x) = \frac{x}{1-x-x^2}$。
-    其**分母的根**（即极点）由 $1-x-x^2=0$ 解得：
+For the Fibonacci sequence $F_n = F_{n-1} + F_{n-2}$:
+
+*   **Generating function perspective**:
+    The generating function is $G(x) = \frac{x}{1-x-x^2}$.
+    The roots of its **denominator** (i.e., poles) are obtained by solving $1-x-x^2=0$:
 
 $$x_1 = \frac{1}{\phi}, \quad x_2 = \frac{1}{\psi}$$
 
-    其中 $\phi = \frac{1+\sqrt{5}}{2}, \psi = \frac{1-\sqrt{5}}{2}$。
+    where $\phi = \frac{1+\sqrt{5}}{2}, \psi = \frac{1-\sqrt{5}}{2}$.
 
-*   **矩阵特征值视角**：
-    转移矩阵 $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$。
-    其**特征方程**为 $\det(M-\lambda I) = \lambda^2 - \lambda - 1 = 0$。
-    解得特征值：
+*   **Matrix eigenvalue perspective**:
+    The transition matrix $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$.
+    Its **characteristic equation** is $\det(M-\lambda I) = \lambda^2 - \lambda - 1 = 0$.
+    The eigenvalues are:
 
 $$\lambda_1 = \phi, \quad \lambda_2 = \psi$$
 
-### 核心结论
-**生成函数的极点倒数 = 矩阵的特征值**。
+### Core conclusion
+
+**The reciprocal of the generating function's poles equals the matrix's eigenvalues**.
 
 $$ \lambda_i = \frac{1}{x_i} $$
 
-*   **原因**：生成函数 $G(x) = \sum F_n x^n$ 的收敛半径由离原点最近的极点决定，而数列的增长率 $F_n \sim C \cdot \lambda^n$ 由最大特征值决定。两者描述的是同一个**渐近行为**。
-*   **应用**：利用留数定理（Residue Theorem）对生成函数进行围道积分，本质上就是在做**谱分解**（Spectral Decomposition），结果与矩阵对角化 $M = PDP^{-1}$ 完全一致。
+*   **Reason**: The radius of convergence of the generating function $G(x) = \sum F_n x^n$ is determined by the pole closest to the origin, while the growth rate of the sequence $F_n \sim C \cdot \lambda^n$ is determined by the largest eigenvalue. Both describe the same **asymptotic behavior**.
+*   **Application**: Using the Residue Theorem to perform contour integration on the generating function is, in essence, performing **spectral decomposition**, and the result is completely consistent with matrix diagonalization $M = PDP^{-1}$.
 
 ---
 
-## 2. 关于“正交矩阵”与“傅立叶级数”的误区
+## 2. The misconception about "orthogonal matrices" and "Fourier series"
 
-“傅立叶级数在实数域上是正交矩阵的转置等于逆，复数域上是酉矩阵”，这在傅立叶变换本身是**正确**的，但**不能直接套用到斐波那契矩阵上**。
+"The Fourier series, over the reals, has an orthogonal matrix whose transpose equals its inverse, and over the complex numbers it is a unitary matrix" — this is **correct** for the Fourier transform itself, but it **cannot be directly applied to the Fibonacci matrix**.
 
-### 为什么斐波那契矩阵不是正交/酉矩阵？
-斐波那契转移矩阵 $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$。
+### Why is the Fibonacci matrix not orthogonal/unitary?
 
-*   **检验正交性**：若 $M$ 是正交矩阵，需满足 $M^T M = I$。
+The Fibonacci transition matrix $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$.
+
+*   **Checking orthogonality**: If $M$ is an orthogonal matrix, it must satisfy $M^T M = I$.
 
 $$ M^T M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix} \neq I $$
 
-*   **特征值性质**：
-    *   **正交/酉矩阵**的特征值模长必须为 **1**（$|\lambda|=1$），这意味着系统能量守恒，不会发散也不会衰减（如旋转矩阵）。
-    *   **斐波那契矩阵**的特征值 $\phi \approx 1.618$ 和 $\psi \approx -0.618$。因为 $|\phi| > 1$，所以数列是**指数增长**的。
+*   **Eigenvalue properties**:
+    *   The eigenvalues of an **orthogonal/unitary matrix** must have modulus **1** ($|\lambda|=1$), which means the system conserves energy—it neither diverges nor decays (e.g., a rotation matrix).
+    *   The Fibonacci matrix has eigenvalues $\phi \approx 1.618$ and $\psi \approx -0.618$. Since $|\phi| > 1$, the sequence is **exponentially growing**.
 
-**结论**：斐波那契矩阵**不可对角化为正交矩阵**。它的特征向量**不正交**。
+**Conclusion**: The Fibonacci matrix **cannot be diagonalized into an orthogonal matrix**. Its eigenvectors are **not orthogonal**.
 
 $$ v_1 \cdot v_2 \neq 0 $$
 
-因此，你**不能**简单地用 $P^{-1} = P^T$ 来简化矩阵对角化过程。必须显式计算 $P^{-1}$。
+Therefore, you **cannot** simply use $P^{-1} = P^T$ to simplify the matrix diagonalization process. You must explicitly compute $P^{-1}$.
 
 ---
 
-## 3. 傅立叶变换何时能用于递推数列？
+## 3. When can the Fourier transform be used for recurrence sequences?
 
-虽然斐波那契矩阵本身不是正交矩阵，但**傅立叶方法（FFT）**在处理**特定类型**的递推或生成函数时非常强大，但这通常发生在以下场景：
+Although the Fibonacci matrix itself is not orthogonal, the **Fourier method (FFT)** is very powerful when handling **specific types** of recurrences or generating functions, but this typically occurs in the following scenarios:
 
-1.  **循环卷积与多项式乘法**：
-    如果递推关系涉及卷积（如 $c_n = \sum a_k b_{n-k}$），利用生成函数 $C(x) = A(x)B(x)$，可以通过**FFT**（基于正交的离散傅立叶变换）在 $O(n \log n)$ 时间内完成系数计算。这里利用的是**循环矩阵**的对角化性质，而非斐波那契矩阵。
+1.  **Circular convolution and polynomial multiplication**:
+    If the recurrence involves convolution (e.g., $c_n = \sum a_k b_{n-k}$), using the generating function $C(x) = A(x)B(x)$, the coefficients can be computed via **FFT** (an orthogonal-based discrete Fourier transform) in $O(n \log n)$ time. This exploits the diagonalization property of **circulant matrices**, not the Fibonacci matrix.
 
-2.  **单位根滤波**：
-    利用傅立叶级数的正交性（$\sum \omega^{kj} = 0$），可以从生成函数中提取特定项（如提取所有偶数项 $F_{2n}$）。这是利用了**离散傅立叶变换（DFT）矩阵的酉性质**，但这作用于**系数提取**过程，而非直接对角化斐波那契矩阵。
+2.  **Root-of-unity filtering**:
+    Using the orthogonality of the Fourier series ($\sum \omega^{kj} = 0$), one can extract specific terms from the generating function (e.g., extracting all even-indexed terms $F_{2n}$). This exploits the **unitary property of the Discrete Fourier Transform (DFT) matrix**, but it acts on the **coefficient extraction** process rather than directly diagonalizing the Fibonacci matrix.
 
 ---
 
-## 总结对照表
+## Summary comparison table
 
-| 概念 | 生成函数法 | 矩阵特征值法 | 傅立叶/正交矩阵法 |
+| Concept | Generating function method | Matrix eigenvalue method | Fourier/orthogonal matrix method |
 | :--- | :--- | :--- | :--- |
-| **核心对象** | $G(x) = \frac{P(x)}{Q(x)}$ | $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$ | $F_N$ (DFT 矩阵) |
-| **关键量** | **极点** (分母根) | **特征值** ($\lambda$) | **单位根** ($e^{i 2\pi/N}$) |
-| **关系** | **极点倒数 = 特征值** | **特征值决定增长率** | **正交基用于展开/卷积** |
-| **逆矩阵** | 部分分式分解 | $P^{-1}$ (需显式计算) | $U^{-1} = U^H$ (共轭转置) |
-| **适用性** | 所有线性递推 | 所有线性递推 | 仅循环卷积或特定提取 |
-| **斐波那契适用?** | **是** (完美匹配) | **是** (完美匹配) | **否** (矩阵非正交) |
+| **Core object** | $G(x) = \frac{P(x)}{Q(x)}$ | $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$ | $F_N$ (DFT matrix) |
+| **Key quantity** | **Poles** (denominator roots) | **Eigenvalues** ($\lambda$) | **Roots of unity** ($e^{i 2\pi/N}$) |
+| **Relation** | **Reciprocal of poles = eigenvalues** | **Eigenvalues determine growth rate** | **Orthogonal basis for expansion/convolution** |
+| **Inverse matrix** | Partial fraction decomposition | $P^{-1}$ (requires explicit computation) | $U^{-1} = U^H$ (conjugate transpose) |
+| **Applicability** | All linear recurrences | All linear recurrences | Only circular convolution or specific extraction |
+| **Applicable to Fibonacci?** | **Yes** (perfect match) | **Yes** (perfect match) | **No** (matrix is not orthogonal) |
 
 

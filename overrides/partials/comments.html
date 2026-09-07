@@ -1,13 +1,12 @@
 {%- set _src  = page.file.src_uri -%}
 {%- set _name = _src.rsplit('/', 1)[-1] -%}
 {#- Comments only on real blog articles. This keeps them off the homepage,
-    项目 / 玩具 and the section indexes (blog/index.md, blog/index.en.md).
+    projects / gadgets and the section indexes (blog/index.md).
 
     The second condition drops mkdocs-static-i18n's fallback copies: those are
-    machine-generated translations under /en/, and giving them their own comment
-    box would split every post into two disjoint threads (one at /blog/x/, one
-    at /en/blog/x/). A post with a genuine .en.md translation is not a fallback
-    and keeps its own box. -#}
+    machine-generated translations under /zh/ (English is now the default
+    locale), and giving them their own comment box would split every post into
+    two disjoint threads (one at /blog/x/, one at /zh/blog/x/). -#}
 {%- set _is_post = _src.startswith('blog/') and not _name.startswith('index') -%}
 {%- set _is_translation = page.file.locale != config.theme.language -%}
 

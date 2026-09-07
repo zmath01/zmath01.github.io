@@ -12,20 +12,20 @@ repo_url: https://github.com/zmath01
 theme:
   name: material
   custom_dir: overrides
-  language: zh
+  language: en
   palette:
     - scheme: default
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-7
-        name: 切换到深色模式
+        name: Switch to dark mode
     - scheme: slate
       primary: indigo
       accent: indigo
       toggle:
         icon: material/brightness-4
-        name: 切换到浅色模式
+        name: Switch to light mode
   features:
     - navigation.tabs            # top-level sections as tabs
     - navigation.sections
@@ -81,11 +81,12 @@ plugins:
       fallback_to_default: true
       languages:
         - locale: zh
-          name: 中文
-          default: true
+          name: Chinese
+          default: false
           build: true
         - locale: en
           name: English
+          default: true
           build: true
 
 # ──────────────────────────────────────────────

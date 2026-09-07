@@ -1,9 +1,9 @@
-# 项目
+# Projects
 
-编程项目与数据科学作品展示。（建设中）
+Coding projects and data-science showcases. (WIP)
 
-规划中的板块：
+Planned sections:
 
-- **weshit-export** —— 编程项目展示
-- **commercial-trend** —— 商业化趋势预测 / 数据科学
-- **niche-discovery** —— 利基市场发现 / 数据科学
+- **weshit-export** — coding project showcase
+- **commercial-trend** — commercialization trend forecasting / data science
+- **niche-discovery** — niche market discovery / data science

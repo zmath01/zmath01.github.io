@@ -1,3 +1,3 @@
-# 玩具
+# Gadgets
 
-Three.js 与其他浏览器小玩意。（建设中）
+Three.js and other browser toys. (WIP)

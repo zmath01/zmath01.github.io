@@ -1,67 +1,67 @@
 # Programmable
 
-技术史视角。要理解 **fx-160** 的局限，以及它与 **俾斯麦的模拟计算机**、**现代嵌入式系统** 的本质区别，需要回到计算机架构的根源——**“冯·诺依曼瓶颈”**与**“硬件固化的算法”**。
+A perspective from the history of technology. To understand the limitations of **fx-160** and its essential difference from **Bismarck's analog computer** and **modern embedded systems**, we must return to the roots of computer architecture — the **"von Neumann bottleneck"** and **"hardwired algorithms"**.
 
-以下将用**具体的数学实例（辛普森积分）**、**实际代码对比**以及**硬件架构分析**来深度解析。
+Below, we provide an in-depth analysis using **concrete mathematical examples (Simpson's integration)**, **practical code comparisons**, and **hardware architecture analysis**.
 
 <!--more-->
 
 ---
 
-### 1. 具体数学问题：为什么 fx-160 无法完成微积分？
+### 1. A Concrete Mathematical Problem: Why Can't the fx-160 Perform Calculus?
 
-以计算定积分为例：
+Take the computation of a definite integral as an example:
 
 $$
-\int_{0}^{1} e^{-x^2} \, dx \quad (\text{没有初等原函数，必须依靠数值方法})
+\int_{0}^{1} e^{-x^2} \, dx \quad (\text{no elementary antiderivative, numerical methods are required})
 $$
 
-**数值方法（辛普森法则）** 的迭代公式为：
+The iteration formula for the **numerical method (Simpson's rule)** is:
 
 $$
 \int_a^b f(x) dx \approx \frac{h}{3} \left[ f(a) + f(b) + 4\sum_{i=1}^{n/2} f(x_{2i-1}) + 2\sum_{i=1}^{n/2-1} f(x_{2i}) \right]
 $$
 
-其中 $ h = (b-a)/n $，需要重复执行 $ n+1 $ 次函数计算，并**累加**到不同的和中。
+where $ h = (b-a)/n $, requiring $ n+1 $ repeated function evaluations, **accumulated** into different sums.
 
 ---
 
-### 2. fx-160（不可编程计算器）的“死穴”：无循环与无分支
+### 2. The "Achilles' Heel" of the fx-160 (Non-programmable Calculator): No Loops and No Branching
 
-fx-160 的内部架构是**硬接线顺序执行**。它没有 **程序计数器（PC）的跳转指令**，也没有 **条件判断（IF）**。
+The internal architecture of the fx-160 is **hardwired sequential execution**. It has no **program counter (PC) jump instruction**, nor any **conditional branch (IF)**.
 
-**在 fx-160 上只能做的是**：
+**What can only be done on the fx-160:**
 
-1. 计算 $ f(0) = 1 $ → 写在纸上。
-2. 计算 $ f(0.1) \approx 0.990 $ → 写在纸上。
-3. 手动心算 $ 1 + 0.990 + ... $
-4. 一直按到 $ f(1) $，最后手动乘除。
+1. Compute $ f(0) = 1 $ → write it on paper.
+2. Compute $ f(0.1) \approx 0.990 $ → write it on paper.
+3. Manually compute in your head $ 1 + 0.990 + ... $
+4. Keep pressing until $ f(1) $, then multiply/divide manually at the end.
 
-**局限性代码表达（人类脑内伪代码，但机器无法执行）**：
+**Expressing the limitation in code (pseudocode in a human's mind, but the machine cannot execute it):**
 ```text
-// fx-160 的内部逻辑（无法实现）：
+// internal logic of the fx-160 (cannot be implemented):
 STORE Sum = 0
-FOR i = 0 TO 100 STEP 1:   // <-- 没有 FOR 循环指令
-    Sum = Sum + f(i*0.01)  // <-- 没有累加存储寄存器
+FOR i = 0 TO 100 STEP 1:   // <-- no FOR loop instruction
+    Sum = Sum + f(i*0.01)  // <-- no accumulator storage register
 NEXT
-PRINT Sum * 0.01          // <-- 无法打印/存储程序
+PRINT Sum * 0.01          // <-- cannot print/store a program
 ```
 
 ---
 
-### 3. 现代电子计算机（Python / C）的解法：存储程序与循环
+### 3. Solution on Modern Electronic Computers (Python / C): Stored Program and Looping
 
-在现代 CPU（冯·诺依曼架构）上，代码和数据存在同一内存中，通过 **PC 指针自增 + 条件跳转** 实现循环。
+On a modern CPU (von Neumann architecture), code and data reside in the same memory, and loops are realized through **PC pointer auto-increment + conditional jumps**.
 
-**Python 代码（在现代嵌入式 Linux 或上位机上运行）**：
+**Python code (runs on modern embedded Linux or a host computer):**
 ```python
 import math
 
 def simpson(f, a, b, n):
-    if n % 2 == 1: n += 1  # 必须为偶数
+    if n % 2 == 1: n += 1  # must be even
     h = (b - a) / n
     total = f(a) + f(b)
-    for i in range(1, n):  # <--- 核心：循环迭代
+    for i in range(1, n):  # <--- core: loop iteration
         x = a + i * h
         if i % 2 == 0:
             total += 2 * f(x)
@@ -69,19 +69,19 @@ def simpson(f, a, b, n):
             total += 4 * f(x)
     return total * h / 3
 
-# 调用
+# invocation
 result = simpson(lambda x: math.exp(-x**2), 0, 1, 100)
-print(result)  # 输出 0.746824
+print(result)  # output 0.746824
 ```
 
-**C 代码（在 MCU 上运行硬实时控制）**：
+**C code (runs on an MCU for hard real-time control):**
 ```c
 double f(double x) { return exp(-x*x); }
 
 double simpson(double a, double b, int n) {
     double h = (b - a) / n;
     double sum = f(a) + f(b);
-    for (int i = 1; i < n; i++) { // 确定性的循环耗时 O(n)
+    for (int i = 1; i < n; i++) { // deterministic loop costs O(n)
         double x = a + i*h;
         sum += (i%2==0) ? 2*f(x) : 4*f(x);
     }
@@ -91,48 +91,48 @@ double simpson(double a, double b, int n) {
 
 ---
 
-### 4. 俾斯麦/大黄蜂的机械模拟计算机（Analog Computer）如何“计算”积分？
+### 4. How Do Bismarck / Hornet's Mechanical Analog Computers "Compute" Integration?
 
-这是最颠覆认知的一点：**模拟计算机根本不运行“代码”，它不需要循环，因为物理定律本身就是并行且连续的。**
+This is the most counterintuitive point: **an analog computer does not run "code" at all; it needs no loops because physical laws are themselves parallel and continuous.**
 
-- **原理**：在俾斯麦的火控系统中，积分由 **“盘-球-圆柱”积分器** 或 **运算放大器（Op-Amp）** 实现。
-- **物理映射**：输入轴的旋转角度代表 $ f(x) $，输出轴的旋转角度通过摩擦轮驱动，其**角速度**与输入成正比。要计算积分 $\int f(x) dx$，只需要让输出轴的**总旋转圈数**累加即可。
-- **数学优势**：求解微分方程（ODE）是**实时的**。当炮弹飞出时，风速变化通过齿轮直接改变炮管仰角，**不需要采样周期，没有离散误差**。
+- **Principle**: In Bismarck's fire-control system, integration is implemented by a **"disk-ball-cylinder" integrator** or an **operational amplifier (Op-Amp)**.
+- **Physical mapping**: The rotation angle of the input shaft represents $ f(x) $; the rotation angle of the output shaft is driven by a friction wheel, and its **angular velocity** is proportional to the input. To compute the integral $\int f(x) dx$, one only needs to accumulate the **total number of revolutions** of the output shaft.
+- **Mathematical advantage**: Solving differential equations (ODEs) is **real-time**. When the shell is fired, changes in wind speed are directly transmitted through gears to alter the gun's elevation angle — **no sampling period is needed, and there is no discretization error**.
 
-**模拟代码（概念性描述，实际是物理连线）**：
+**Analog "code" (a conceptual description; in reality it is physical wiring):**
 ```text
-// 在模拟计算机上，这不是代码，而是电路/齿轮连接：
-// 输入: 电压信号 V_in (代表加速度)
-// 输出: V_out = -1/(RC) * ∫ V_in dt
-// 积分器通过电容器的电荷累积完成，这是连续时间行为。
+// on an analog computer, this is not code but circuit/gear connections:
+// input: voltage signal V_in (represents acceleration)
+// output: V_out = -1/(RC) * ∫ V_in dt
+// the integrator is implemented by charge accumulation in a capacitor; this is continuous-time behavior.
 ```
 
 ---
 
-### 5. 深度对比表：从 fx-160 到现代嵌入式（衣阿华）
+### 5. In-depth Comparison Table: From the fx-160 to Modern Embedded Systems (Iowa)
 
-| 维度 | **fx-160（不可编程数字）** | **俾斯麦/大黄蜂（模拟机械）** | **衣阿华（现代嵌入式数字）** |
+| Dimension | **fx-160 (non-programmable digital)** | **Bismarck / Hornet (analog mechanical)** | **Iowa (modern embedded digital)** |
 | :--- | :--- | :--- | :--- |
-| **计算方法** | 人工分步按键，无存储程序 | **连续物理模拟**（电荷/齿轮转动） | **离散迭代**（冯·诺依曼循环） |
-| **求解积分** | **无法自动求解**。只能逐点计算，人类手动求和。 | **实时求解**。物理元件自然执行积分（积分器）。 | **软件求解**。运行上述 `for` 循环算法。 |
-| **实时性** | N/A（依赖人脑，秒级~分钟级） | **硬实时（纳秒级物理响应）** | 硬实时（MCU，<1ms）或非实时（Linux，>10ms） |
-| **循环/迭代** | **无**。没有 `GOTO` 或 `LOOP` 指令。 | **无**。物理定律是并行的，不需要“循环”。 | **有**。程序计数器（PC）跳转实现迭代。 |
-| **精度与噪声** | 极高（数字 BCD 精度，~10位） | 极低（受齿轮公差、温度、摩擦力影响，~2-3位有效数字） | 极高（双精度浮点，但有舍入误差积累）。 |
-| **可编程性** | **零**（固件固定，无法更改公式） | **零**（硬件拓扑固定，除非重新连线/换齿轮） | **极高**（OTA更新软件，可切换 MPC/PID/NN）。 |
-| **错误来源** | 人为按键错误 | 机械磨损、物理噪声、重力影响 | 数值离散误差、溢出、量子化噪声。 |
+| **Computation method** | Manual step-by-step key presses, no stored program | **Continuous physical simulation** (charge / gear rotation) | **Discrete iteration** (von Neumann looping) |
+| **Solving integrals** | **Cannot be solved automatically**. Only point-by-point computation, with manual summation by a human. | **Solved in real time**. Physical components naturally perform integration (integrator). | **Solved in software**. Runs the `for` loop algorithm above. |
+| **Real-time performance** | N/A (depends on the human brain, seconds to minutes) | **Hard real-time (nanosecond physical response)** | Hard real-time (MCU, <1ms) or non-real-time (Linux, >10ms) |
+| **Looping / iteration** | **None**. No `GOTO` or `LOOP` instruction. | **None**. Physical laws are parallel and need no "loop". | **Yes**. Program counter (PC) jumps implement iteration. |
+| **Precision and noise** | Extremely high (digital BCD precision, ~10 digits) | Extremely low (affected by gear tolerance, temperature, friction, ~2-3 significant digits) | Extremely high (double-precision floating point, but with accumulated rounding error). |
+| **Programmability** | **Zero** (firmware fixed, formulas cannot be changed) | **Zero** (hardware topology fixed unless rewired / gears replaced) | **Extremely high** (OTA software updates, can switch between MPC/PID/NN). |
+| **Sources of error** | Human key-press errors | Mechanical wear, physical noise, gravitational effects | Numerical discretization error, overflow, quantization noise. |
 
 ---
 
-### 6. 总结：为什么 fx-160 是“死胡同”，而现代计算机是“通用机”？
+### 6. Conclusion: Why the fx-160 is a "Dead End" while Modern Computers are "General-Purpose Machines"?
 
-1. **fx-160 是“硬接线计算器”**：它的 ROM 里只固化了三角函数和对数的泰勒展开前几项。它**没有**指令寄存器来存储用户编写的“循环累加”指令。它只能做一步运算，结果由人类接管。
-2. **模拟计算机（俾斯麦）是“物理方程求解器”**：它利用物理学（电荷流动、牛顿力学）直接映射数学问题。优点是无离散误差、实时性极限高；缺点是**精度差**且**抗干扰弱**（海浪震动即导致齿轮误差）。
-3. **现代嵌入式（衣阿华/无人机）是“混合体”**：
-   - **通用 CPU / GPU**（非实时）：运行 Python/C++ 做复杂的积分、SLAM 和 LLM 推理（利用循环和分支）。
-   - **专用 MCU**（硬实时）：运行上述 C 代码，虽然需要循环耗时（例如 100 次迭代花 100μs），但其确定性调度（RTOS）保证了在 1ms 中断到来前必须算完。
+1. **The fx-160 is a "hardwired calculator"**: Its ROM contains only the first few terms of the Taylor expansions for trigonometric and logarithmic functions. It **has no** instruction register to store the user-written "loop-and-accumulate" instructions. It can only perform one operation at a time, after which a human takes over.
+2. **The analog computer (Bismarck) is a "physical equation solver"**: It uses physics (charge flow, Newtonian mechanics) to directly map mathematical problems. Its advantages are no discretization error and an extremely high real-time ceiling; its drawbacks are **poor precision** and **weak noise immunity** (wave-induced vibration causes gear errors).
+3. **Modern embedded systems (Iowa / drones) are a "hybrid"**:
+   - **General-purpose CPU / GPU** (non-real-time): Runs Python/C++ for complex integration, SLAM, and LLM inference (exploiting loops and branches).
+   - **Dedicated MCU** (hard real-time): Runs the C code above; although looping takes time (e.g., 100 iterations in 100μs), its deterministic scheduling (RTOS) guarantees the computation completes before the 1ms interrupt arrives.
 
-**最具讽刺性的真相**：
+**The most ironic truth:**
 
-- 要计算 $\int e^{-x^2}dx$，**2025 年的衣阿华**会直接用 MCU 跑 100 次循环，耗时 0.5ms；
-- 而 **1941 年的俾斯麦** 虽然没有数字循环，但它的模拟积分器在炮弹飞行的 0.5 秒内**连续不间断地**完成了物理积分。
-- fx-160（1980 年）处于两者之间——**既没有模拟的连续性，也没有数字的循环能力，尴尬地卡在了“高级算盘”的位置。**
+- To compute $\int e^{-x^2}dx$, **Iowa in 2025** would simply run 100 loops on its MCU, taking 0.5ms;
+- whereas **Bismarck in 1941**, despite having no digital loop, had its analog integrator perform physical integration **continuously and without interruption** within the 0.5 seconds the shell was in flight.
+- The fx-160 (1980) sits in between — **possessing neither the continuity of analog nor the looping capability of digital, awkwardly stuck in the position of an "advanced abacus."**

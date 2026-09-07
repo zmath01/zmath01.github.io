@@ -1,10 +1,10 @@
-# 你好，我是 zmath01
+# Hi, I'm zmath01
 
-数学，代码，以及两者之间的一切
+Math, code, and everything in between
 
-- **博客** —— 学习笔记与技术长文：机器学习，生成函数，量子计算，系统与 HPC ......
-- **项目** —— 编程项目与数据科学作品展示
-- **Gadgets** —— Three.js gadgets
+- **Blog** — study notes and long-form technical posts: machine learning, generating functions, quantum computing, systems & HPC ......
+- **Projects** — coding projects and data-science showcases
+- **Gadgets** — Three.js gadgets
 
-全文搜索在右上角 🔍
-每篇文章右侧有可点击跳转的目录
+Full-text search is in the top-right corner 🔍
+Every post has a clickable table of contents on the right

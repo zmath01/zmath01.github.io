@@ -136,20 +136,20 @@ return newHead
 
 Chinese Version
 
-#### **1. 自我介绍**
+#### **1. Self-introduction**
 
-- 提及熟悉的技术栈（Golang、数据结构算法、网络、操作系统等）。
-- 简要说明项目经验（如课程设计、开源项目、实习经历等）。
+- Mention the familiar technology stack (Golang, data structures and algorithms, networking, operating systems, etc.).
+- Briefly describe project experience (such as course projects, open-source projects, internships, etc.).
 
-#### **2. 介绍一下你的项目**
+#### **2. Introduce your project**
 
-- **项目名称** + **核心功能**（如高性能服务器）。
-- **技术栈**（如 Golang 协程、Redis 缓存等）。
-- **个人贡献**（如优化算法、解决并发问题、设计架构等）。
-- **遇到的挑战** + **如何解决**（如内存泄漏、性能瓶颈等）。
+- **Project name** + **Core functions** (e.g., high-performance server).
+- **Technology stack** (e.g., Golang coroutines, Redis cache, etc.).
+- **Personal contribution** (e.g., algorithm optimization, solving concurrency issues, designing architecture, etc.).
+- **Challenges encountered** + **How to solve** (e.g., memory leaks, performance bottlenecks, etc.).
 
-#### **3. 口述反转链表算法**
-**方法 1：迭代法（C++）**
+#### **3. Verbal reverse linked list algorithm**
+**Method 1: Iterative method (C++)**
 ```cpp
 ListNode* reverseList(ListNode* head) {
     ListNode *prev = nullptr, *curr = head;
@@ -162,7 +162,7 @@ ListNode* reverseList(ListNode* head) {
     return prev;
 }
 ```
-**方法 2：递归法（Golang）**
+**Method 2: Recursive method (Golang)**
 ```go
 func reverseList(head *ListNode) *ListNode {
     if head == nil || head.Next == nil {
@@ -175,60 +175,60 @@ func reverseList(head *ListNode) *ListNode {
 }
 ```
 
-#### **4. 深度优先（DFS） vs 广度优先（BFS）**
-| **特性**       | **DFS（栈/递归）**          | **BFS（队列）**            |
+#### **4. Depth-first (DFS) vs Breadth-first (BFS)**
+| **Features** | **DFS (stack/recursion)** | **BFS (queue)** |
 |--------------|---------------------------|--------------------------|
-| **遍历顺序**   | 一条路走到底，再回溯         | 逐层遍历                 |
-| **空间复杂度** | O(h)（h=树高）             | O(w)（w=树最宽层的节点数） |
-| **适用场景**   | 拓扑排序、连通性、回溯问题   | 最短路径、层级遍历       |
+| **Traversal order** | Go all the way down one path, then backtrack | Traverse layer by layer |
+| **Space complexity** | O(h) (h = tree height) | O(w) (w = number of nodes in the widest layer of the tree) |
+| **Applicable scenarios** | Topological sorting, connectivity, backtracking problems | Shortest path, hierarchical traversal |
 
-#### **5. 哈希表（Hash Table）**
+#### **5. Hash Table**
 
-- **底层原理**：数组 + 哈希函数（如取模），冲突解决（开放寻址、链地址法）。
-- **时间复杂度**：
-  - 插入/删除/查找：平均 O(1)，最坏 O(n)（哈希冲突严重时）。
-- **Golang 的 `map`**：使用拉链法，动态扩容。
-- **C++ 的 `unordered_map`**：基于哈希桶实现。
+- **Underlying principle**: array + hash function (e.g., modulo), conflict resolution (open addressing, separate chaining).
+- **Time complexity**:
+  - Insert/delete/search: average O(1), worst O(n) (when hash collisions are severe).
+- **Golang's `map`**: uses the zipper method (separate chaining) and dynamically expands capacity.
+- **C++'s `unordered_map`**: implemented based on hash buckets.
 
-#### **6. 什么是死锁？**
+#### **6. What is deadlock?**
 
-- **定义**：多个进程/线程因竞争资源而互相等待，导致无法继续执行。
-- **必要条件**（缺一不可）：
-  1. **互斥条件**：资源一次只能被一个进程占用。
-  2. **占有并等待**：进程持有资源并等待其他资源。
-  3. **非抢占条件**：已分配的资源不能被强制剥夺。
-  4. **循环等待**：存在一个进程的等待环。
-- **解决方法**：
-  - 破坏必要条件（如超时机制、资源预分配）。
-  - 银行家算法（避免死锁）。
+- **Definition**: Multiple processes/threads wait for each other due to competition for resources, resulting in the inability to continue execution.
+- **Necessary conditions** (none can be missing):
+  1. **Mutual exclusion condition**: A resource can only be occupied by one process at a time.
+  2. **Hold and wait**: A process holds resources while waiting for other resources.
+  3. **No preemption condition**: Allocated resources cannot be forcibly taken away.
+  4. **Circular wait**: There exists a waiting cycle among processes.
+- **Solutions**:
+  - Break the necessary conditions (e.g., timeout mechanisms, resource pre-allocation).
+  - Banker's algorithm (to avoid deadlock).
 
-#### **7. 进程 vs 线程 vs 协程**
-| **维度**     | **进程**               | **线程**               | **协程（Goroutine）**  |
+#### **7. Process vs Thread vs Coroutine**
+| **Dimension** | **Process** | **Thread** | **Coroutine (Goroutine)** |
 |------------|-----------------------|-----------------------|-----------------------|
-| **资源分配** | 独立内存空间（开销大）  | 共享进程内存（开销小）  | 用户态调度（极轻量）   |
-| **切换成本** | 高（需内核介入）        | 中（内核调度）         | 低（用户态切换）       |
-| **并发性**   | 多核并行               | 多核并行               | 单线程内高并发         |
-| **示例**     | Chrome 多标签页        | Java 多线程            | Golang 的 Goroutine   |
+| **Resource allocation** | Independent memory space (high overhead) | Shared process memory (low overhead) | User-mode scheduling (extremely lightweight) |
+| **Switching cost** | High (requires kernel intervention) | Medium (kernel scheduling) | Low (user-mode switching) |
+| **Concurrency** | Multi-core parallelism | Multi-core parallelism | High concurrency within a single thread |
+| **Example** | Chrome multi-tabs | Java multi-threading | Golang's Goroutine |
 
 #### **8. TCP vs UDP**
-| **特性**       | **TCP（可靠）**          | **UDP（不可靠）**       |
+| **Features** | **TCP (reliable)** | **UDP (unreliable)** |
 |--------------|------------------------|-----------------------|
-| **连接方式**   | 面向连接（三次握手）     | 无连接                |
-| **可靠性**     | 保证数据顺序、不丢失     | 可能丢包、乱序        |
-| **速度**       | 慢（重传、拥塞控制）     | 快（无额外控制）      |
-| **应用场景**   | HTTP、FTP、数据库        | 视频流、游戏、DNS     |
+| **Connection method** | Connection-oriented (three-way handshake) | Connectionless |
+| **Reliability** | Guarantees data order and no loss | Possible packet loss and disorder |
+| **Speed** | Slow (retransmission, congestion control) | Fast (no additional control) |
+| **Application scenarios** | HTTP, FTP, database | Video streaming, games, DNS |
 
-#### **9. 虚拟内存**
+#### **9. Virtual memory**
 
-- **作用**：
-  - 扩展可用内存（通过磁盘交换）。
-  - 隔离进程地址空间（提高安全性）。
-- **核心机制**：
-  - **分页**：内存划分为固定大小的页（如 4KB），由 MMU 管理。
-  - **页表**：记录虚拟页到物理页的映射。
-  - **缺页中断**：访问未加载的页时触发，从磁盘调入。
-- **优点**：
-  - 允许运行比物理内存更大的程序。
-  - 避免进程间内存冲突。
+- **Functions**:
+  - Expand available memory (through disk swapping).
+  - Isolate process address spaces (improve security).
+- **Core mechanisms**:
+  - **Paging**: Memory is divided into fixed-size pages (e.g., 4KB), managed by the MMU.
+  - **Page table**: Records the mapping from virtual pages to physical pages.
+  - **Page fault interrupt**: Triggered when accessing an unloaded page; loaded from disk.
+- **Advantages**:
+  - Allows running programs larger than physical memory.
+  - Avoids memory conflicts between processes.
 
 ---
