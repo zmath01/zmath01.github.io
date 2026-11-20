@@ -10,7 +10,7 @@ https://pages.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/de-Boor.html
 
 https://github.com/caadxyz/DeBoorAlgorithmNurbs
 
-======
+---
 
 https://mitocw.ups.edu.ec/courses/mechanical-engineering/2-158j-computational-geometry-spring-2003
 
@@ -74,14 +74,14 @@ https://news.ycombinator.com/item?id=27517503
 
 / 3. 
 
-/ >> How are you handling the fact that it seems like none of the computational geometry algorithms parallelize?
+>> How are you handling the fact that it seems like none of the computational geometry algorithms parallelize?
 
-/ >> Even something as fundamental as line segment intersection doesn't seem to have any good parallel algorithms.
+>> Even something as fundamental as line segment intersection doesn't seem to have any good parallel algorithms.
 
-/ > We don't need parallel algorithms at the lowest level. A NURBS model consists of a large number of surfaces and trim curves. You'll be hard pressed to find "standard" algorithms for NURBS boolean operations, but jwesthues (creator of solvespace) chose a fairly good process for handling them. To combine 2 NURBS shells we compute intersections of each curve from A against each surface from B as one step in the process. Finding all those intersections can be done in parallel. Each step in the boolean process can similarly be done in parallel at either the curve or surface level.
+> We don't need parallel algorithms at the lowest level. A NURBS model consists of a large number of surfaces and trim curves. You'll be hard pressed to find "standard" algorithms for NURBS boolean operations, but jwesthues (creator of solvespace) chose a fairly good process for handling them. To combine 2 NURBS shells we compute intersections of each curve from A against each surface from B as one step in the process. Finding all those intersections can be done in parallel. Each step in the boolean process can similarly be done in parallel at either the curve or surface level.
 
-/ > We also do triangle mesh creation in parallel now, as each surface patch is triangulated separately it was easy to run them in parallel. This was a huge win for things like a torus where there are many surface patches with compound curvature and lots of triangles.
+> We also do triangle mesh creation in parallel now, as each surface patch is triangulated separately it was easy to run them in parallel. This was a huge win for things like a torus where there are many surface patches with compound curvature and lots of triangles.
 
-/ > We had one nasty bug where dragging some geometry around would start to distort a couple surfaces. Turns out there is a function to intersect a ray with a NURBS surface that recursively subdivides the surface. The recursive subdivision was altering the weights of the original surface control points and then putting them back. Running that on multiple threads at once could lead to corruption. I don't recall how I tracked that down, but the fix was to simply make a copy of the surface and discard it when done rather than changing the original. This whole ray-surface intersection thing is another example of an algorithm that doesn't really benefit from parallelization for a single call, but there's no reason we can't go up a level and have multiple threads calling that function with different ray/surface combination.
+> We had one nasty bug where dragging some geometry around would start to distort a couple surfaces. Turns out there is a function to intersect a ray with a NURBS surface that recursively subdivides the surface. The recursive subdivision was altering the weights of the original surface control points and then putting them back. Running that on multiple threads at once could lead to corruption. I don't recall how I tracked that down, but the fix was to simply make a copy of the surface and discard it when done rather than changing the original. This whole ray-surface intersection thing is another example of an algorithm that doesn't really benefit from parallelization for a single call, but there's no reason we can't go up a level and have multiple threads calling that function with different ray/surface combination.
 
-/ > I was really pleased that most of the complicated code in Solvespace is written in a functional style - meaning it doesn't mutate data. Another part of the NURBS boolean process is to create a BSP-tree for each surface, which is then discarded after the operation is complete. Once again, that can be done in parallel over all the surfaces even though it'd be hard to create a single BSP-tree using parallel code.
+> I was really pleased that most of the complicated code in Solvespace is written in a functional style - meaning it doesn't mutate data. Another part of the NURBS boolean process is to create a BSP-tree for each surface, which is then discarded after the operation is complete. Once again, that can be done in parallel over all the surfaces even though it'd be hard to create a single BSP-tree using parallel code.

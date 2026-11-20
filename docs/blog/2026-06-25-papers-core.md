@@ -4,7 +4,6 @@ Adam: A Method for Stochastic Optimization
 Authors: Diederik P. Kingma, Jimmy Ba
 First Author: Diederik P. Kingma
 Year: 2014
-Citations: 180,000
 arXiv: 1412.6980
 https://arxiv.org/abs/1412.6980
 
@@ -38,18 +37,18 @@ $$m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t$$
 
 This equation effectively smooths the gradient signal, reducing variance and helping the optimizer move consistently in the right direction.
 
-### 3. Biased Second Raw Moment Estimate (Uncentered Variance)
+### 3. Biased Second Raw Moment Estimate
 Adam also maintains an exponentially decaying average of past *squared* gradients, similar to RMSProp:
 
 $$v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$$
 
-*   **$v_t$**: The biased second raw moment estimate (uncentered variance of gradients) at time $t$.
+*   **$v_t$**: The biased second raw moment estimate (mean of squared gradients) at time $t$.
 *   **$v_{t-1}$**: The second moment estimate from the previous time step.
 *   **$\beta_2$**: The exponential decay rate for the second moment. The paper suggests a default value of **0.999**.
-*   **$g_t^2$**: The element-wise square of the current gradient ($g_t \odot g_t$). Squaring ensures all values are positive and emphasizes large gradients.
+*   **$g_t^2$**: The element-wise square of the current gradient ($g_t \odot g_t$). Squaring makes the entries nonnegative and emphasizes large gradients.
 *   **$(1 - \beta_2)$**: The weight assigned to the current squared gradient.
 
-This term adapts the learning rate: parameters with large, volatile gradients get smaller updates, while those with small, consistent gradients get larger updates.
+A larger second moment reduces the multiplier on the first moment, holding the other quantities fixed. The actual update depends on both moments.
 
 ### 4. Bias Correction
 Since $m_t$ and $v_t$ are initialized as vectors of zeros, they are biased towards zero, especially during the initial time steps (when $t$ is small). Adam corrects this bias:
@@ -64,7 +63,7 @@ $$\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$$
 *   **$1 - \beta_2^t$**: The bias correction term for the second moment.
 *   **$t$**: The current time step.
 
-Without this correction, the initial updates would be very small because $m_t$ and $v_t$ start near zero.
+The correction compensates for the finite total weight of the observations when the moments start at zero. Both moments enter the update, so omitting the correction does not necessarily make the first step smaller.
 
 ### 5. Parameter Update Rule
 The final step updates the parameters using the corrected moments:
@@ -80,14 +79,14 @@ $$\theta_t = \theta_{t-1} - \alpha \cdot \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \ep
 *   **$\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$**: The adaptive update term. This effectively divides the learning rate for each parameter individually based on the history of its gradients.
 
 ### Summary of Hyperparameters
-The paper recommends the following default values, which work well for most deep learning problems:
+The paper recommends these starting values for the problems it studies:
 
 *   **$\alpha = 0.001$**: Learning rate.
 *   **$\beta_1 = 0.9$**: Decay rate for the first moment.
 *   **$\beta_2 = 0.999$**: Decay rate for the second moment.
 *   **$\epsilon = 10^{-8}$**: Numerical stability constant.
 
-These values require little tuning, making Adam a robust "out-of-the-box" optimizer.
+The best settings still depend on the problem and training setup.
 
 ---
 
@@ -95,7 +94,6 @@ Deep Residual Learning for Image Recognition
 Authors: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
 First Author: Kaiming He
 Year: 2015
-Citations: 130,000
 arXiv: 1512.03385
 https://arxiv.org/abs/1512.03385
 
@@ -110,7 +108,7 @@ $$\mathbf{y} = \mathcal{F}(\mathbf{x}, \{W_i\}) + \mathbf{x}$$
 
 *   **$\mathbf{y}$**: The output vector of the residual block (before the final activation function).
 *   **$\mathbf{x}$**: The input vector to the residual block. This represents the feature maps entering the block.
-*   **$\mathcal{F}(\mathbf{x}, \{W_i\})$**: The **residual mapping** to be learned. This is the function represented by the stacked layers (the "shortcut" path).
+*   **$\mathcal{F}(\mathbf{x}, \{W_i\})$**: The **residual mapping** to be learned. This is the function represented by the stacked layers in the residual branch. The shortcut provides the separate $\mathbf{x}$ term.
     *   **$\mathcal{F}$**: The residual function itself. In the basic 2-layer block, $\mathcal{F} = W_2 \sigma(W_1 \mathbf{x})$.
     *   **$\{W_i\}$**: The set of weight matrices (and biases, though often omitted in notation for brevity) for the layers within the block. For a 2-layer block, this includes $W_1$ and $W_2$.
 *   **$+$**: Element-wise addition. This operation adds the original input $\mathbf{x}$ directly to the output of the stacked layers. This requires $\mathbf{x}$ and $\mathcal{F}(\mathbf{x})$ to have the same dimensions.
@@ -153,23 +151,22 @@ $$x_{l+1} = f(x_l + \mathcal{F}(x_l, W_l))$$
 *   **$W_l$**: Weights specific to the $l$-th unit.
 *   **$f$**: The ReLU activation function applied after the addition.
 
-This recursive addition allows gradients to flow directly through the shortcut connections ($\frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \frac{\partial \mathcal{F}}{\partial \mathbf{x}} + 1$), mitigating the vanishing gradient problem in very deep networks.
+This recursive addition allows gradients to flow directly through the shortcut connections ($\frac{\partial \mathbf{y}}{\partial \mathbf{x}} = \frac{\partial \mathcal{F}}{\partial \mathbf{x}} + I$), before the final activation. The full block Jacobian also includes the derivative of that activation.
 
 
 ---
 
 Why Does Deep and Cheap Learning Work So Well?
-Authors: Henry W. Lin, Max Tegmark
+Authors: Henry W. Lin, Max Tegmark, David Rolnick
 First Author: Henry W. Lin
 Year: 2016
-Citations: 1,000
 https://arxiv.org/abs/1608.08225
 
 ## 3. Why Does Deep and Cheap Learning Work So Well? -- Clarification on the Paper Title
 
 (published in *Journal of Statistical Physics*, 2017)
 
-The core argument is that deep learning succeeds because the physical laws governing our universe generate data with specific mathematical properties (symmetry, locality, compositionality) that neural networks are uniquely efficient at approximating.
+The core argument is that deep learning succeeds because the physical laws governing our universe generate data with specific mathematical properties (symmetry, locality, compositionality) that can help explain why some distributions admit efficient neural-network approximations.
 
 ## Explanation of Key Mathematical Symbols and Formulas
 
@@ -198,10 +195,10 @@ $$H_x(y) = h + \sum_i h_i y_i + \sum_{i \le j} h_{ij} y_i y_j + \sum_{i \le j \l
 *   **$\sum$**: The summation symbol, indicating the sum over all specified indices.
 *   **$i \le j$**: A constraint on the summation indices to avoid double-counting symmetric interaction terms (since $y_i y_j = y_j y_i$).
 
-The paper argues that physical laws typically involve only low-order terms (usually up to degree 2, 3, or 4), making this series converge rapidly and allowing simple networks to approximate it.
+The paper argues that physical laws typically involve only low-order terms (usually up to degree 2, 3, or 4), motivating low-degree models. This is a modeling assumption and does not imply rapid convergence for arbitrary likelihoods.
 
 ### 3. Neural Network Approximation of Multiplication
-A key mathematical hurdle is showing that neurons can perform multiplication (required for the $y_i y_j$ terms) using only addition and non-linear activation. The authors derive an approximation for multiplication $m(u, v) \approx uv$ using a smooth activation function $\sigma$ (like sigmoid or softplus).
+A key mathematical hurdle is showing that neurons can perform multiplication (required for the $y_i y_j$ terms) using only addition and non-linear activation. The authors derive an approximation for multiplication $m(u, v) \approx uv$ using a smooth activation function $\sigma$ with nonzero quadratic coefficient at the expansion point, such as softplus at zero.
 
 $$m(u, v) = \frac{\sigma(u+v) + \sigma(-u-v) - \sigma(u-v) - \sigma(-u+v)}{8\sigma_2}$$
 
@@ -211,7 +208,7 @@ $$m(u, v) = \frac{\sigma(u+v) + \sigma(-u-v) - \sigma(u-v) - \sigma(-u+v)}{8\sig
 *   **$\sigma_2$**: The second-order coefficient in the Taylor expansion of $\sigma(x) \approx \sigma_0 + \sigma_1 x + \sigma_2 x^2 + \dots$. This term must be non-zero for the approximation to work.
 *   **$8\sigma_2$**: A normalization factor derived from the Taylor series algebra to isolate the $uv$ term.
 
-This formula proves that a network with just a few hidden units can simulate multiplication, and by extension, any polynomial.
+The numerator has leading term $8\sigma_2uv$. To approximate multiplication uniformly on a bounded input domain, evaluate the expression at $(hu,hv)$ and divide by $h^2$, then take $h\to 0$. Composing such approximations gives polynomial approximations on bounded domains.
 
 ### 4. Vector Notation for Softmax
 When dealing with discrete classes, the probability distribution is often written in vector notation, equating the Boltzmann form to the softmax function used in deep learning.
@@ -231,7 +228,7 @@ $$f(\mathbf{v}) = \sigma_L A_L \dots \sigma_2 A_2 \sigma_1 A_1 \mathbf{v}$$
 
 *   **$f(\mathbf{v})$**: The final output function of the network.
 *   **$\mathbf{v}$**: The input vector.
-*   **$A_k$**: Affine transformation matrices at layer $k$ (representing weights and biases: $A_k \mathbf{v} = W_k \mathbf{v} + b_k$).
+*   **$A_k$**: Affine maps at layer $k$ (representing weights and biases: $A_k \mathbf{v} = W_k \mathbf{v} + b_k$).
 *   **$\sigma_k$**: Element-wise non-linear activation functions at layer $k$.
 *   **$L$**: The total number of layers in the network.
 
@@ -243,7 +240,6 @@ Attention Is All You Need
 Authors: Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin
 First Author: Ashish Vaswani
 Year: 2017
-Citations: 150,000
 arXiv: 1706.03762
 https://arxiv.org/abs/1706.03762
 

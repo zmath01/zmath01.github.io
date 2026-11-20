@@ -7,7 +7,7 @@
 // 2. The claim "linear = cheap" requires a triple correction:
 
 - ( a ) Linear equations ≠ low complexity — Schrödinger is linear but its simulation is BQP-hard, and the Ising partition function is #P-hard;
-- ( b ) The rigorous version of "bits cheap / atoms expensive" is **Landauer** (erasure costs $kT\ln 2$, copying is free) + the quantum no-cloning theorem;
+- ( b ) The rigorous version of "bits cheap / atoms expensive" is **Landauer** (erasure costs $kT\ln 2$, logically reversible copying is not subject to that particular erasure bound) + the quantum no-cloning theorem;
 - ( c ) it-from-qubit / AdS/CFT provides a legitimate mathematical form of "gravitational non-linearity = boundary state-preparation complexity" (Ryu–Takayanagi area = entanglement entropy; complexity = action; black hole = maximal-complexity state), **but it holds only in holographic settings**.
 
 // 3. Agriculture → Aristocracy → Theoretical Science:
@@ -42,8 +42,8 @@ The precise statement of why QFT is hard to axiomatize:
 
 - Formal perturbation theory is fine (Feynman diagrams, finite renormalization);
 - Non-perturbative existence of 4D interacting QFT = unsolved (Yang–Mills mass gap, Clay);
-- Constructive QFT (Glimm–Jaffe) succeeds only in 2D/3D ($\phi^{4}_{3}$);
-- Haag's theorem: interacting QFT has no Fock-space representation → "naive axiomatization" fails structurally.
+- Constructive QFT includes low-dimensional examples such as $\phi^4_3$;
+- Haag’s theorem obstructs the usual interaction picture that relates free and interacting relativistic fields by a unitary at a fixed time, under its hypotheses.
 
 The "measurement scale expands" hypothesis is upgraded to: the analyzable scale window (ratio $\ell_{\text{macro}}/\ell_{\text{micro}}$) has expanded from $\sim 10^{2}$ in the agricultural era to $\sim 10^{60}$ today ($10^{-35}\,\text{m}$ to $10^{26}\,\text{m}$), with inter-layer coupling → a single closed axiomatic system cannot span micro-meso-macro, and each level needs its own effective theory + connection theorem. Deng–Hani–Ma is precisely a rigorous connection theorem for this chain (Newton → Boltzmann → Euler/NSF); whereas the Clay NS problem is about "well-posedness of the equations themselves", pointing in the opposite direction. The two problems constitute the two ends of modern mathematical physics: where the equations come from / whether the equations are well-posed.
 
@@ -55,10 +55,10 @@ Yau's argument (QM linear spectral analysis vs. GR non-linear PDE), but the clai
 
 **(2) The physical basis for "bits cheap / atoms expensive":**
 
-- Landauer's principle: erasing 1 bit costs at least $kT\ln 2$ of energy; copying (propagation) has no thermodynamic lower bound.
-- Quantum no-cloning theorem: an unknown quantum state cannot be perfectly copied → only "classicalized" information (macroscopic state + error correction) can be copied for free. The fiber-optic internet copies classical information; moving an atom = having to erase the original location = paying entropy. "Cheap information propagation vs. expensive matter transport" has a rigorous thermodynamic / quantum-information version.
+- Landauer's principle: resetting one unbiased bit releases at least $k_B T\ln 2$ of heat to a bath at temperature $T$ in the standard ideal model. Actual copying and communication still have physical costs.
+- Quantum no-cloning theorem: an unknown quantum state cannot be perfectly copied → classical data and states drawn from a known orthogonal basis can be copied. The fiber-optic internet copies classical information; moving an atom = having to erase the original location = paying entropy. "Cheap information propagation vs. expensive matter transport" has a rigorous thermodynamic / quantum-information version.
 
-**(3) it-from-qubit / AdS/CFT:** "Is non-linear gravity = high computational complexity?" The answer: yes, in the sense of holographic duality.
+**(3) it-from-qubit / AdS/CFT:** "Is non-linear gravity = high computational complexity?" The duality provides concrete results about some entanglement observables and motivates conjectures about complexity. It does not establish this general equality.
 
 - The bulk geometry ↔ boundary entanglement structure (Ryu–Takayanagi: area = entanglement entropy; ER = EPR; tensor networks).
 - Black hole = maximal-complexity state (fastest scrambler); complexity growth ~ action (complexity = action/volume, Brown–Susskind, Stanford–Susskind).
@@ -99,13 +99,15 @@ $$
 
 Here $c$ is the individual absorption rate, $L$ is lifespan, and the number of fields one can master is $\sim L/T(t)$. "Most people only care about the part combining renormalization + DL applications, while only the wealthy and leisured mathematical physicists care about canonical measure in path integral, loop space" is precisely a portrait of individual behavior under this model (and "wealthy and leisured" echoes Veblen: pure curiosity-driven research is a luxury).
 
-**(3) Park–Leahy–Funk (2023, Nature):** "Papers and patents are becoming less disruptive over time" — in the era of knowledge explosion, the "disruptiveness" of papers (disruption index) actually keeps declining, while consolidating / bridge-building work rises as a share. → "Bridge-builders" are indeed increasing, but the relative share of "pioneers" is declining; this is two sides of the same coin as the worry about "academic islands": as network size $n$ grows, the number of edges needed to stay connected is $\sim n\log n$ (random-graph giant-component threshold), yet if bridge-building output grows only linearly with $n$, the graph necessarily fragments. This is the precise version from percolation / network science: islanding = the knowledge graph falling below the connectivity threshold.
+**(3) Park–Leahey–Funk (2023, Nature):** "Papers and patents are becoming less disruptive over time" — in the era of knowledge explosion, the "disruptiveness" of papers (disruption index) actually keeps declining, while consolidating / bridge-building work rises as a share. The index is based on citation patterns and does not directly measure the number of pioneers or bridge-builders. As an analogy, in the Erdős–Rényi model a giant component emerges around mean degree $1$, while full connectivity emerges around mean degree $\log n$. These are different thresholds and do not by themselves imply fragmentation of an actual knowledge graph. [Park, Leahey, and Funk](https://doi.org/10.1038/s41586-022-05543-x)
 
 **(4) Knowledge generation and dissemination are out of sync:** The generation side (researchers × compute) is super-exponential; the dissemination side (human reading / learning) is linear; the verification side (peer review) is linear and already overloaded in 2026 (ICML 23,918 submissions, 30 emails to find one reviewer). HF's 2,226 automatically reproduced papers are the first industrial-scale expansion of the "verification side" — but it introduces a new error source (83.2%-precision-type metrics), i.e., "trading error for coverage."
 
 ### 2.5 The Verification Crisis in the AI Era (Detecting Fraud / Reproducibility)
 
-- **Statistical model:** Suppose the detector has precision $p=0.832$, specificity $q$ (unknown), and base rate $\mathrm{prev}$ (the proportion of papers that truly contain errors, unknown); then the positive predictive value is $\mathrm{PPV}=\frac{p\cdot\mathrm{prev}}{p\cdot\mathrm{prev}+(1-q)(1-\mathrm{prev})}$. Reporting only "83.2% precision" is insufficient for evaluation; if $\mathrm{prev}$ is low (fraud rate ~1%), then even with high $p$, many "positives" are false alarms. So the number "83.2%" itself needs context — this is a methodological critique of the article's citation.
+- **Statistical model:** Let $s$ be sensitivity, $q$ specificity, and $\pi$ the prevalence of the condition being detected. When the denominator is nonzero, Bayes’ rule gives
+  $\mathrm{PPV}=\frac{s\pi}{s\pi+(1-q)(1-\pi)}$.
+  Precision is already PPV, so it cannot be substituted for sensitivity. A precision figure measured on one benchmark does not establish precision at a different base rate. An error detector also cannot establish intent to commit fraud.
 
 - **Mechanistic innovation in the reproducibility challenge:** claims extraction → built-in agent reproduction → public logbook → human judges treat the logbook's self-assessment as untrustworthy → auditing the audit. This is the first step in bringing "procedural justice" into scientific verification: shifting from "trusting reviewers" to "auditable automated reproduction."
 
@@ -131,9 +133,9 @@ The imbalance among these four cost curves produces four phenomena:
 
 ## Appendix
 
-- arXiv abs 2503.01800（Deng–Hani–Ma, Hilbert VI）
+- [Deng–Hani–Ma, Hilbert VI](https://arxiv.org/abs/2503.01800)
 -  https://claymath.org/millennium/Navier-Stokes-Equation/
-- arXiv 2608.00222（Gao, Jacobian counterexamples）
+- [Gao, Jacobian counterexamples](https://arxiv.org/abs/2608.00222)
 - https://vibemathed.com/problem/modular-family-of-2-tori-as-a-complex-structure-on-s6
 - https://arstechnica.com/science/2026/08/peer-review-is-overwhelmed-can-it-survive-in-the-ai-era/
 - https://huggingface.co/blog/icml-2026-open-reproductions

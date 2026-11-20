@@ -1,6 +1,6 @@
 # Möbius transformation and matrix binary exponentiation
 
-The **Möbius transformation** (Möbius Transformation), i.e., the linear fractional transformation $f(x) = \frac{ax+b}{cx+d}$, can be solved for its value after $n$ iterations in $O(\log n)$ time using **matrix binary exponentiation**.
+The **Möbius transformation** (Möbius Transformation), i.e., the linear fractional transformation $f(x) = \frac{ax+b}{cx+d}$, can be solved for its value after $n$ iterations in $O(\log n)$ matrix multiplications using **matrix binary exponentiation**.
 
 This is not merely a special case of the Fibonacci sequence, but a direct application of **homogeneous coordinates** and **projective geometry** in algorithms. Its core principle lies in transforming the nonlinear "fractional operation" into a linear "matrix multiplication".
 
@@ -13,7 +13,7 @@ The reason the Möbius transformation can be represented by a matrix is that we 
 ### Matrix representation of the transformation
 
 For the transformation $f(x) = \frac{ax+b}{cx+d}$, we can construct the matrix $M = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$.
-When we write $x$ as the homogeneous coordinate vector $\mathbf{v} = \begin{pmatrix} x \\ 1 \end{pmatrix}$, the matrix multiplication is as follows:
+The determinant must satisfy $ad-bc\ne0$. When we write $x$ as the homogeneous coordinate vector $\mathbf{v} = \begin{pmatrix} x \\ 1 \end{pmatrix}$, the matrix multiplication is as follows:
 
 $$
 M \mathbf{v} = \begin{pmatrix} a & b \\ c & d \end{pmatrix} \begin{pmatrix} x \\ 1 \end{pmatrix} = \begin{pmatrix} ax+b \\ cx+d \end{pmatrix}
@@ -32,7 +32,7 @@ $$
 
 ## 2. Algorithm implementation: matrix binary exponentiation
 
-Once the problem is transformed into $M^n$, we can directly use the **matrix binary exponentiation** algorithm to reduce the time complexity from $O(n)$ to $O(\log n)$.
+Once the problem is transformed into $M^n$, we can directly use the **matrix binary exponentiation** algorithm to reduce the number of matrix multiplications from linear to logarithmic in $n$.
 
 ### General steps
 
@@ -45,6 +45,9 @@ Once the problem is transformed into $M^n$, we can directly use the **matrix bin
 ### Code example (Python)
 
 ```python
+from fractions import Fraction
+from math import gcd
+
 def mat_mul(A, B, mod=None):
     """2x2 matrix multiplication"""
     C = [[0, 0], [0, 0]]
@@ -52,11 +55,16 @@ def mat_mul(A, B, mod=None):
         for j in range(2):
             for k in range(2):
                 C[i][j] += A[i][k] * B[k][j]
-            if mod: C[i][j] %= mod
+            if mod is not None:
+                C[i][j] %= mod
     return C
 
 def mat_pow(M, n, mod=None):
     """matrix binary exponentiation"""
+    if n < 0:
+        raise ValueError("n must be nonnegative")
+    if mod is not None and mod < 2:
+        raise ValueError("mod must be at least 2")
     res = [[1, 0], [0, 1]]  # identity matrix
     base = M
     while n > 0:
@@ -70,6 +78,11 @@ def mobius_iterate(a, b, c, d, x0, n, mod=None):
     """
     compute f^n(x0), where f(x) = (ax+b)/(cx+d)
     """
+    determinant = a * d - b * c
+    if determinant == 0:
+        raise ValueError("a Möbius transformation needs an invertible matrix")
+    if mod is not None and gcd(determinant, mod) != 1:
+        raise ValueError("the determinant must be invertible modulo mod")
     M = [[a, b], [c, d]]
     Mn = mat_pow(M, n, mod)
     
@@ -80,14 +93,14 @@ def mobius_iterate(a, b, c, d, x0, n, mod=None):
     numerator = (A * x0 + B)
     denominator = (C * x0 + D)
     
-    if mod:
-        # under modulo: compute the modular inverse of the denominator
-        return (numerator * pow(denominator, mod - 2, mod)) % mod
-    else:
-        return numerator / denominator
+    if mod is not None:
+        return (numerator * pow(denominator, -1, mod)) % mod
+    if denominator == 0:
+        return None  # The projective point at infinity.
+    return Fraction(numerator, denominator)
 
-# example: f(x) = (2x + 1) / (x + 2), iterated 10^18 times
-# print(mobius_iterate(2, 1, 1, 2, 3, 10**18)) 
+print(mobius_iterate(2, 1, 1, 2, 3, 5))
+print(mobius_iterate(2, 1, 1, 2, 3, 10**18, 101))
 ```
 
 ## 3. Scope of application and extensions
@@ -103,13 +116,13 @@ This method is not limited to simple fractions; it applies to all **linear fract
 
 ### Notes
 
-1.  **Zero denominator**: If at some step during iteration $cx+d=0$, the corresponding result in projective geometry is $\infty$. This needs to be handled specially in code (usually mapped to the matrix condition $C x_0 + D = 0$).
-2.  **Modular arithmetic**: In competitive programming, computation is usually required modulo $P$. In this case, division must be converted to **multiplicative inverse** (Fermat's little theorem or the extended Euclidean algorithm), and the denominator must be coprime to the modulus.
+1.  **Zero denominator**: If at some step during iteration $cx+d=0$, the corresponding result in projective geometry is $\infty$. The matrix computation can pass through infinity. The code returns `None` when the final denominator is zero over the rationals.
+2.  **Modular arithmetic**: In competitive programming, computation is usually required modulo $P$. In this case, division must be converted to **multiplicative inverse** and the denominator must be coprime to the modulus. In Python 3.8+, `pow(denominator, -1, mod)` raises `ValueError` when the inverse does not exist. The determinant must also be coprime to the modulus for the matrix to be invertible.
 3.  **Limits of nonlinearity**: This method applies only to **linear fractional** transformations. If the recurrence contains $x^2$, $\sin(x)$, or other nonlinear terms, a constant matrix cannot be directly constructed for acceleration (unless more complex linearization techniques or approximations are used).
 
 ## Summary
 
 *   **Essence**: Use **homogeneous coordinates** to lift a one-dimensional nonlinear fractional transformation into a two-dimensional linear transformation.
 *   **Tool**: **Matrix multiplication** corresponds to function composition, and **matrix binary exponentiation** corresponds to multiple iterations.
-*   **Advantage**: Optimizes $O(n)$ simulation iteration into $O(\log n)$, capable of handling extremely large iteration counts on the order of $n=10^{18}$.
+*   **Advantage**: The number of matrix multiplications is logarithmic. Without a modulus, exact integers can grow to $O(n)$ digits for fixed integer coefficients, so the same bound does not apply to bit complexity or output size.
 *   **Generalization**: This is a general paradigm for handling **linear recurrences** (including constant-coefficient linear recurrence sequences and linear fractional recurrences).

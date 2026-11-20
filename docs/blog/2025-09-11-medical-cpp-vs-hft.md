@@ -2,11 +2,7 @@
 
 https://www.reddit.com/r/QtFramework/comments/emo3iu/anyone_developing_medical_software/
 
-C++ gets used plenty in mission-critical applications. It requires extra business processes to meet certain regulatory requirements. 
-
-military > high frequency trading > average commercial realms
-
-But not actually academically "proven" bugless.
+C++ is used in some medical devices and in low-latency trading systems. A programming language alone does not demonstrate software correctness. Medical-device software and trading software can have different assurance goals, such as patient safety and response-time predictability.
 
 ## HFT
 

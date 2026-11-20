@@ -11,7 +11,7 @@ Two versions:
 
 1. **Iterative Approach**: Avoids function call overhead.
 2. **Floor Division (`//`)**: Used for index calculation to ensure integer results.
-3. **Early Exit**: Handles edge cases like empty lists or single-element lists quickly.
+3. **Boundary cases**: The same loop handles empty and single-element lists.
 4. **No Slicing**: Avoids creating new sub-lists during recursion (if using recursive approach) by passing `left` and `right` indices instead. This keeps time complexity at $O(\log n)$ and space complexity at $O(1)$ for the iterative version.
 
 ### Code (`binary_search.py`)
@@ -83,8 +83,8 @@ if __name__ == "__main__":
 
 ### Which one to use?
 
-- Use **`binary_search_iterative`** for production code in Python. It is faster and doesn't risk hitting the recursion limit for very large lists.
-- Use **`binary_search_recursive`** if you prefer code readability and don't expect extremely large inputs.
+- Use **`binary_search_iterative`** for production code in Python. It avoids function-call overhead and uses constant auxiliary space.
+- Use **`binary_search_recursive`** when a recursive formulation reads more clearly.
 
 Both have $O(\log n)$ time complexity and $O(1)$ space complexity (for iterative) or $O(\log n)$ space complexity (for recursive due to call stack).
 
@@ -98,7 +98,7 @@ Python integers have **arbitrary precision**. This means they can grow as large 
 ### Why do people say it causes overflow?
 This warning is critical in languages like **C, C++, Java, or Go**, where integers have fixed sizes (e.g., 32-bit signed integers max out at `2,147,483,647`).
 
-If `left` and `right` are both large (e.g., near `2^31 - 1`), their sum can exceed the maximum value an `int` can hold, causing **integer overflow** (wrapping around to negative numbers), which breaks the binary search logic.
+If `left` and `right` are both large (e.g., near `2^31 - 1`), their sum can exceed the maximum value an `int` can hold, causing **integer overflow**. Signed overflow is undefined in C and C++. Java and Go define the overflow result for their integer types.
 
 ### Safe Calculation (Language-Agnostic Best Practice)
 To be safe across all languages and follow best practices, you can calculate `mid` without adding the two large numbers directly:

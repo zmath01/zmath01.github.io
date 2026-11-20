@@ -1,5 +1,5 @@
-# MathJax configuration — must load BEFORE mathjax-loader.js.
-# Works with pymdownx.arithmatex generic mode: $...$ / $$...$$ / \(...\) / \[...\]
+// MathJax configuration — must load BEFORE mathjax-loader.js.
+// Works with pymdownx.arithmatex generic mode: $...$ / $$...$$ / \(...\) / \[...\]
 window.MathJax = {
   tex: {
     inlineMath: [["\\(", "\\)"]],
@@ -9,7 +9,7 @@ window.MathJax = {
     tags: "none",
   },
   options: {
-    ignoreHtmlClass: ".*|tex2jax_ignore",
-    processHtmlClass: "tex2jax_include",
+    ignoreHtmlClass: "tex2jax_ignore",
+    processHtmlClass: "arithmatex",
   },
 };

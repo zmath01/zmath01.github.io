@@ -30,8 +30,8 @@ $$ f(x) = e^{\lambda x} $$
 
 *   **The essence of the Fourier transform**:
     *   When $\lambda$ is restricted to pure imaginary ($\lambda = i\omega$), the eigenfunction becomes $e^{i\omega x}$ (oscillation mode).
-    *   The **Fourier transform** projects any function $f(x)$ onto the **eigenbasis** $\{e^{i\omega x}\}$ of the differentiation operator $D$.
-    *   **Effect**: The complex **differentiation** ($D$) in the time/spatial domain becomes the simple **scalar multiplication** ($\times i\omega$) in the frequency domain (eigenvalue domain).
+    *   The **Fourier transform** expands suitable functions into the **generalized modes** $\{e^{i\omega x}\}$ of differentiation. On the real line these plane waves are generalized eigenfunctions and lie outside $L^2$.
+    *   **Effect** (for sufficiently regular, decaying functions): The complex **differentiation** ($D$) in the time/spatial domain becomes the simple **scalar multiplication** ($\times i\omega$) in the frequency domain (eigenvalue domain).
 
 $$ \mathcal{F}\{f'(x)\} = i\omega \cdot \mathcal{F}\{f(x)\} $$
 
@@ -39,7 +39,7 @@ $$ \mathcal{F}\{f'(x)\} = i\omega \cdot \mathcal{F}\{f(x)\} $$
 
 ## 3. Special functions and Lie algebra symmetry: a unified picture of mathematical physics
 
-**The vast majority of classical special functions** (Bessel, Legendre, Hermite, etc.) are joint eigenfunctions of the symmetry operators of some Lie group, or basis vectors in the representation theory of that Lie algebra.
+Many classical special functions arise as separated eigenfunctions of differential operators or as functions associated with symmetry representations.
 
 1.  **Symmetry generators**:
     Physical systems (such as the hydrogen atom, harmonic oscillator) usually possess geometric symmetries (rotation, translation). These symmetries form a **Lie group**, whose infinitesimal generators form a **Lie algebra**.
@@ -47,22 +47,19 @@ $$ \mathcal{F}\{f'(x)\} = i\omega \cdot \mathcal{F}\{f(x)\} $$
     *   For example: 3D rotational symmetry $\to$ $SO(3)$ group $\to$ $\mathfrak{so}(3)$ Lie algebra (angular momentum operators $L_x, L_y, L_z$).
 
 2.  **Birth of special functions**:
-    *   When we solve symmetric partial differential equations (such as the Laplace equation $\nabla^2 \psi = 0$ or the Schrödinger equation) using the **method of separation of variables**, we are essentially seeking the **joint eigenfunctions** of a **set of mutually commuting operators** in the Lie algebra (such as $L^2$ and $L_z$).
+    *   When we solve symmetric partial differential equations (such as the Laplace equation $\nabla^2 \psi = 0$ or the Schrödinger equation) using the **method of separation of variables**, we are essentially seeking the **joint eigenfunctions** of a set of commuting differential operators. For example, $L_z$ generates rotations and $L^2$ is the quadratic Casimir built from the generators.
     *   **Spherical harmonics $Y_{l}^m(\theta, \phi)$**: are precisely the eigenfunctions of the angular momentum operators $L^2$ and $L_z$.
     *   **Bessel function $J_n(x)$**: originates from cylindrical symmetry (translation + rotation), corresponding to the representation of the Euclidean group $E(2)$.
     *   **Legendre polynomial $P_n(x)$**: originates from spherical symmetry.
 
 3.  **The theory of Willard Miller**:
-    As search results show, mathematicians such as Miller have established a systematic theory: the symmetry algebra of **superintegrable systems** directly generates the theory of special functions.
+    Willard Miller developed systematic connections between Lie symmetries, separation of variables, and special functions.
 
     *   Recurrence formulas of special functions $\leftrightarrow$ the **ladder operators** of the Lie algebra.
     *   Orthogonality of special functions $\leftrightarrow$ the **Schur orthogonality** of group representations.
     *   Addition formulas of special functions $\leftrightarrow$ the **Clebsch-Gordan coefficients** of the group.
 
-**However, not all** special functions are generated solely by Lie algebras.
-
-*   **Classical special functions** (hypergeometric function family): indeed mainly correspond to representations of low-dimensional Lie algebras (such as $\mathfrak{sl}(2, \mathbb{C})$).
-*   **Generalized special functions** (such as Painlevé transcendents): may correspond to more complex structures (such as quantum groups, infinite-dimensional Lie algebras, or deformed symmetries), not just classical finite-dimensional Lie algebras.
+These correspondences depend on the function and representation. Painlevé transcendents, for example, arise from nonlinear differential equations and have a separate connection to isomonodromic deformations. [NIST DLMF `32.4](https://dlmf.nist.gov/32.4)
 
 ## Summary:
 

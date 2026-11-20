@@ -85,7 +85,7 @@ def proof_of_work(self, previous_proof):
 - **Logic**: 
   - Iterates incrementing `new_proof` until hash starts with '0000' (difficulty level)
   - Uses exponentiation: `previous_proof²  - new_proof²`
-  - Time complexity: O(n) where n depends on mining difficulty
+  - Each trial computes one digest. With four leading hexadecimal zeros and a uniform-hash model, the expected number of trials is $16^4$.
 
 ---
 
@@ -107,6 +107,8 @@ def hash(self, block):
 ### **is_chain_valid() Method (Lines 39-51)**
 ```python
 def is_chain_valid(self, chain):
+    if not chain:
+        return False
     previous_block = chain[0]
     block_index = 1
     while block_index < len(chain):
@@ -153,13 +155,13 @@ def index():
 
 #### **Mine Block Route (Lines 58-72)**
 ```python
-@app.route('/mine_block', methods=['GET'])
+@app.route('/mine_block', methods=['POST'])
 def mine_block():
     previous_block = blockchain.get_previous_block()
     new_proof = blockchain.proof_of_work(previous_block['proof'])
     previous_hash = blockchain.hash(previous_block)
     block = blockchain.create_block(new_proof, previous_hash)
-    response = {...}
+    response = {"block": block}
     return jsonify(response), 200
 ```
 
@@ -168,7 +170,7 @@ def mine_block():
   - Performs proof of work calculation
   - Hashes previous block
   - Creates and stores new block
-- **Data Structure**: Returns JSON response (dictionary)
+- **Data Structure**: Returns the mined block as JSON. The route uses POST because it changes server state.
 
 #### **Get Chain Route (Lines 73-78)**
 ```python
@@ -198,6 +200,8 @@ def is_valid():
 - Validates entire blockchain using the `is_chain_valid()` method
 
 ---
+
+This is an in-memory teaching example. Its proof condition depends on consecutive proof integers rather than committing to block contents. The validation routine checks adjacent links and that toy proof condition. Authenticating food-safety records would also require trusted data collection, authenticated inputs, and durable storage.
 
 ## **Summary of Data Structures**
 | Data Structure | Use |
