@@ -2,26 +2,30 @@
 
 Line-by-Line Explanation of Data Structures and Algorithms
 
+The snippets form a single-process Flask example. Indent the method snippets under `class Blockchain:` and place the Flask app and routes after the class. The index route expects a `templates/index.html` file.
+
 <!--more-->
 
-## **Imports (Lines 1-4)**
+## **Imports**
 ```python
 import datetime
 import hashlib
 import json
+from threading import Lock
 from flask import Flask, jsonify, render_template
 ```
 
 - **datetime**: Standard library for timestamp generation
 - **hashlib**: Cryptographic hashing library (SHA-256)
 - **json**: For serializing objects to JSON format
+- **Lock**: Serializes access to the in-memory chain across request threads
 - **Flask**: Web framework for creating REST API endpoints
 
 ---
 
-## **Blockchain Class Definition (Line 6)**
+## **Blockchain Class Definition**
 
-### **Constructor (Lines 7-9)**
+### **Constructor**
 ```python
 def __init__(self):
     self.chain = []
@@ -33,7 +37,7 @@ def __init__(self):
 
 ---
 
-### **create_block() Method (Lines 11-20)**
+### **create_block() Method**
 ```python
 def create_block(self, proof, previous_hash):
     block = {
@@ -51,11 +55,11 @@ def create_block(self, proof, previous_hash):
   - `timestamp`: Current time (string)
   - `proof`: Proof of work value (integer)
   - `previous_hash`: Hash of previous block (string)
-- **Algorithm**: O(1) time complexity - appends block to list
+- **Algorithm**: Amortized O(1) list append for a fixed-size block
 
 ---
 
-### **get_previous_block() Method (Lines 22-23)**
+### **get_previous_block() Method**
 ```python
 def get_previous_block(self):
     return self.chain[-1]
@@ -66,7 +70,7 @@ def get_previous_block(self):
 
 ---
 
-### **proof_of_work() Method (Lines 25-33)**
+### **proof_of_work() Method**
 ```python
 def proof_of_work(self, previous_proof):
     new_proof = 1
@@ -85,11 +89,11 @@ def proof_of_work(self, previous_proof):
 - **Logic**: 
   - Iterates incrementing `new_proof` until hash starts with '0000' (difficulty level)
   - Uses exponentiation: `previous_proof²  - new_proof²`
-  - Each trial computes one digest. With four leading hexadecimal zeros and a uniform-hash model, the expected number of trials is $16^4$.
+  - Each trial computes one digest. With four leading hexadecimal zeros and a uniform-hash model, each trial succeeds with probability $16^{-4}$, so the expected number of trials is $16^4$.
 
 ---
 
-### **hash() Method (Lines 35-37)**
+### **hash() Method**
 ```python
 def hash(self, block):
     encoded_block = json.dumps(block, sort_keys=True).encode()
@@ -104,47 +108,60 @@ def hash(self, block):
 
 ---
 
-### **is_chain_valid() Method (Lines 39-51)**
+### **is_chain_valid() Method**
 ```python
 def is_chain_valid(self, chain):
     if not chain:
         return False
-    previous_block = chain[0]
-    block_index = 1
-    while block_index < len(chain):
-        block = chain[block_index]
-        if block['previous_hash'] != self.hash(previous_block):
+
+    previous_block = None
+    for index, block in enumerate(chain, start=1):
+        if not isinstance(block, dict):
             return False
-        hash_operation = hashlib.sha256(str(previous_block['proof']**2 - block['proof']**2).encode()).hexdigest()
-        if hash_operation[:4] != '0000':
+        block_index = block.get('index')
+        if type(block_index) is not int or block_index != index:
             return False
+        proof = block.get('proof')
+        if type(proof) is not int or proof < 1:
+            return False
+
+        if previous_block is None:
+            if proof != 1 or block.get('previous_hash') != '0':
+                return False
+        else:
+            if block.get('previous_hash') != self.hash(previous_block):
+                return False
+            proof_input = str(previous_block['proof']**2 - proof**2).encode()
+            if not hashlib.sha256(proof_input).hexdigest().startswith('0000'):
+                return False
         previous_block = block
-        block_index += 1
+
     return True
 ```
 
 - **Algorithm**: **Linear traversal with validation** - O(n) where n = chain length
 - **Verification Logic**:
-  1. Checks if each block's `previous_hash` matches the actual hash of the previous block
-  2. Validates the proof of work (hash must start with '0000')
-  3. Continues through entire chain
+  1. Checks the genesis block, consecutive indices, and positive integer proofs
+  2. Checks if each later block's `previous_hash` matches the actual hash of the previous block
+  3. Validates the proof of work (hash must start with '0000')
 - **Data Structure**: Linear list traversal
 
 ---
 
-## **Flask Web Application (Lines 53-75)**
+## **Flask Web Application**
 
-### **Initialization (Lines 53-54)**
+### **Initialization**
 ```python
 app = Flask(__name__)
 blockchain = Blockchain()
+chain_lock = Lock()
 ```
 
-- Creates Flask app instance and blockchain instance
+- Creates the Flask app, the blockchain, and the lock shared by its routes
 
 ### **Routes**
 
-#### **Index Route (Lines 55-57)**
+#### **Index Route**
 ```python
 @app.route('/', methods=['GET'])
 def index():
@@ -153,14 +170,15 @@ def index():
 
 - Serves HTML template (frontend interface)
 
-#### **Mine Block Route (Lines 58-72)**
+#### **Mine Block Route**
 ```python
 @app.route('/mine_block', methods=['POST'])
 def mine_block():
-    previous_block = blockchain.get_previous_block()
-    new_proof = blockchain.proof_of_work(previous_block['proof'])
-    previous_hash = blockchain.hash(previous_block)
-    block = blockchain.create_block(new_proof, previous_hash)
+    with chain_lock:
+        previous_block = blockchain.get_previous_block()
+        new_proof = blockchain.proof_of_work(previous_block['proof'])
+        previous_hash = blockchain.hash(previous_block)
+        block = blockchain.create_block(new_proof, previous_hash)
     response = {"block": block}
     return jsonify(response), 200
 ```
@@ -169,27 +187,27 @@ def mine_block():
   - Retrieves last block
   - Performs proof of work calculation
   - Hashes previous block
-  - Creates and stores new block
+  - Creates and stores the new block. The lock keeps another request from mining against the same previous block.
 - **Data Structure**: Returns the mined block as JSON. The route uses POST because it changes server state.
 
-#### **Get Chain Route (Lines 73-78)**
+#### **Get Chain Route**
 ```python
 @app.route('/get_chain', methods=['GET'])
 def get_chain():
-    response = {
-        'chain': blockchain.chain,
-        'length': len(blockchain.chain)
-    }
-    return jsonify(response), 200
+    with chain_lock:
+        chain = blockchain.chain.copy()
+    return jsonify({'chain': chain, 'length': len(chain)}), 200
 ```
 
 - Returns entire blockchain as JSON
 
-#### **Validation Route (Lines 79-86)**
+#### **Validation Route**
 ```python
 @app.route('/is_valid', methods=['GET'])
 def is_valid():
-    is_valid = blockchain.is_chain_valid(blockchain.chain)
+    with chain_lock:
+        chain = blockchain.chain.copy()
+    is_valid = blockchain.is_chain_valid(chain)
     if is_valid:
         response = {'message': 'All good. The blockchain is valid.'}
     else:
@@ -201,7 +219,7 @@ def is_valid():
 
 ---
 
-This is an in-memory teaching example. Its proof condition depends on consecutive proof integers rather than committing to block contents. The validation routine checks adjacent links and that toy proof condition. Authenticating food-safety records would also require trusted data collection, authenticated inputs, and durable storage.
+This is an in-memory teaching example. Its proof condition depends on consecutive proof integers rather than committing to block contents. The validation routine checks the expected genesis values, indices, adjacent links, and the toy proof condition. For example, editing the timestamp of the last block leaves those checks unchanged. Authenticating food-safety records would also require trusted data collection, authenticated inputs, and durable storage.
 
 ## **Summary of Data Structures**
 | Data Structure | Use |
@@ -214,7 +232,7 @@ This is an in-memory teaching example. Its proof condition depends on consecutiv
 ## **Summary of Algorithms**
 | Algorithm | Complexity | Purpose |
 |---|---|---|
-| **Proof of Work** | O(n) | Mining difficulty/security |
-| **SHA-256 Hashing** | O(1) | Block integrity verification |
-| **Chain Validation** | O(n) | Detect tampering |
-| **Linear Search** | O(1) avg | Get previous block |
+| **Proof of Work** | $16^4$ expected hash trials under the uniform-hash model | Find a proof satisfying the four-zero condition |
+| **SHA-256 Hashing** | O(b) for b input bytes | Compute a digest |
+| **Chain Validation** | O(n) for n fixed-size blocks | Check genesis, indices, links, and proofs |
+| **List Indexing** | O(1) | Get previous block |

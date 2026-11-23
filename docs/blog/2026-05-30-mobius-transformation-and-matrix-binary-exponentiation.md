@@ -40,7 +40,7 @@ Once the problem is transformed into $M^n$, we can directly use the **matrix bin
 2.  **Binary exponentiation**: Compute $M^n = \underbrace{M \times M \times \dots \times M}_{n \text{ times}}$.
     *   If $n$ is even, $M^n = (M^{n/2})^2$
     *   If $n$ is odd, $M^n = M \cdot M^{n-1}$
-3.  **Recover the result**: Let $M^n = \begin{pmatrix} A & B \\ C & D \end{pmatrix}$, then $f^{(n)}(x_0) = \frac{A x_0 + B}{C x_0 + D}$.
+3.  **Recover the result**: Let $M^n = \begin{pmatrix} A & B \\ C & D \end{pmatrix}$, then $f^{(n)}([x_0:1])=[A x_0+B:C x_0+D]$. Divide the coordinates when the second is nonzero to obtain the affine value.
 
 ### Code example (Python)
 
@@ -76,8 +76,12 @@ def mat_pow(M, n, mod=None):
 
 def mobius_iterate(a, b, c, d, x0, n, mod=None):
     """
-    compute f^n(x0), where f(x) = (ax+b)/(cx+d)
+    Compute f^n(x0) for integer coefficients.
+    Without a modulus, x0 can be an integer or Fraction.
+    With a modulus, use an integer x0 and a final denominator that is a unit.
     """
+    if mod is not None and mod < 2:
+        raise ValueError("mod must be at least 2")
     determinant = a * d - b * c
     if determinant == 0:
         raise ValueError("a Möbius transformation needs an invertible matrix")
@@ -109,7 +113,7 @@ This method is not limited to simple fractions; it applies to all **linear fract
 
 | Scenario | Recurrence formula | Corresponding matrix $M$ | Remarks |
 | :--- | :--- | :--- | :--- |
-| **Fibonacci ratio** | $x_{n} = 1 + \frac{1}{x_{n-1}}$ | $\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$ | Continued fraction form, converges to the golden ratio |
+| **Fibonacci ratio** | $x_{n} = 1 + \frac{1}{x_{n-1}}$ | $\begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$ | Continued fraction form, converges to the golden ratio for positive initial values |
 | **General Möbius** | $x_{n} = \frac{ax_{n-1}+b}{cx_{n-1}+d}$ | $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$ | Standard form |
 | **Recurrence with constant term** | $x_{n} = \frac{a x_{n-1} + b}{c x_{n-1} + d} + k$ | Combine by finding common denominator first | Requires algebraic manipulation to reduce to standard fractional form |
 | **Composite transformation** | $f(g(x))$ | $M_f \times M_g$ | Matrix multiplication order corresponds to function composition order |
@@ -117,7 +121,7 @@ This method is not limited to simple fractions; it applies to all **linear fract
 ### Notes
 
 1.  **Zero denominator**: If at some step during iteration $cx+d=0$, the corresponding result in projective geometry is $\infty$. The matrix computation can pass through infinity. The code returns `None` when the final denominator is zero over the rationals.
-2.  **Modular arithmetic**: In competitive programming, computation is usually required modulo $P$. In this case, division must be converted to **multiplicative inverse** and the denominator must be coprime to the modulus. In Python 3.8+, `pow(denominator, -1, mod)` raises `ValueError` when the inverse does not exist. The determinant must also be coprime to the modulus for the matrix to be invertible.
+2.  **Modular arithmetic**: In competitive programming, computation is usually required modulo $P$. In this case, division must be converted to **multiplicative inverse** and the denominator must be coprime to the modulus. In Python 3.8+, `pow(denominator, -1, mod)` raises `ValueError` when the inverse does not exist. The determinant must also be coprime to the modulus for the matrix to be invertible. Over a prime modulus, a zero final denominator represents infinity. Over a composite modulus, a nonzero denominator can also fail to be invertible. The modular code returns an affine residue or raises `ValueError`.
 3.  **Limits of nonlinearity**: This method applies only to **linear fractional** transformations. If the recurrence contains $x^2$, $\sin(x)$, or other nonlinear terms, a constant matrix cannot be directly constructed for acceleration (unless more complex linearization techniques or approximations are used).
 
 ## Summary

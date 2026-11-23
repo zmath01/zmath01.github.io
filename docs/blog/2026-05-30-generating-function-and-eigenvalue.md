@@ -12,7 +12,7 @@ The generating function method and the matrix eigenvalue method are essentially 
 
 ### Mathematical correspondence
 
-For the Fibonacci sequence $F_n = F_{n-1} + F_{n-2}$:
+For the Fibonacci sequence $F_0=0$, $F_1=1$, with $F_n=F_{n-1}+F_{n-2}$ for $n\ge2$:
 
 *   **Generating function perspective**:
     The generating function is $G(x) = \frac{x}{1-x-x^2}$.
@@ -24,7 +24,7 @@ $$x_1 = \frac{1}{\phi}, \quad x_2 = \frac{1}{\psi}$$
 
 *   **Matrix eigenvalue perspective**:
     The transition matrix $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$.
-    Its **characteristic equation** is $\det(M-\lambda I) = \lambda^2 - \lambda - 1 = 0$.
+    Its **characteristic polynomial** is $\det(M-\lambda I)=\lambda^2-\lambda-1$.
     The eigenvalues are:
 
 $$\lambda_1 = \phi, \quad \lambda_2 = \psi$$
@@ -54,7 +54,7 @@ $$ M^T M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} \begin{pmatrix} 1 & 1 \\
 
 *   **Eigenvalue properties**:
     *   The eigenvalues of an **orthogonal/unitary matrix** must have modulus **1** ($|\lambda|=1$), which means the system conserves energy—it neither diverges nor decays (e.g., a rotation matrix).
-    *   The Fibonacci matrix has eigenvalues $\phi \approx 1.618$ and $\psi \approx -0.618$. Since $|\phi| > 1$, the sequence is **exponentially growing**.
+    *   The Fibonacci matrix has eigenvalues $\phi \approx 1.618$ and $\psi \approx -0.618$. Since $\lvert\phi\rvert > 1$, the sequence is **exponentially growing**.
 
 **Conclusion**: Although $M$ itself is not orthogonal, its eigenvectors $v_1=(\phi,1)^T$ and $v_2=(\psi,1)^T$ satisfy $v_1^T v_2=\phi\psi+1=0$. Normalize them to form the orthogonal matrix $P$. Then
 
@@ -69,7 +69,7 @@ $$
 Although the Fibonacci matrix itself is not orthogonal, the **Fourier method (FFT)** is very powerful when handling **specific types** of recurrences or generating functions, but this typically occurs in the following scenarios:
 
 1.  **Circular convolution and polynomial multiplication**:
-    If the recurrence involves convolution (e.g., $c_n = \sum a_k b_{n-k}$), using the generating function $C(x) = A(x)B(x)$, the coefficients can be computed via **FFT** (an orthogonal-based discrete Fourier transform) in $O(n \log n)$ time. This exploits the diagonalization property of **circulant matrices**, not the Fibonacci matrix.
+    If the recurrence involves convolution (e.g., $c_n = \sum a_k b_{n-k}$), using the generating function $C(x) = A(x)B(x)$, the coefficients can be computed via **FFT** (an algorithm for the DFT) in $O(n \log n)$ time. The DFT diagonalizes circulant matrices. For ordinary polynomial multiplication, zero-pad to avoid wraparound.
 
 2.  **Root-of-unity filtering**:
     Using the orthogonality of the Fourier series ($\sum_{j=0}^{N-1}\omega^{kj}=0$ for a primitive $N$-th root $\omega$ and $k$ not divisible by $N$), one can extract specific terms from the generating function (e.g., extracting all even-indexed terms $F_{2n}$). This exploits the **unitary property of the Discrete Fourier Transform (DFT) matrix**, but it acts on the **coefficient extraction** process rather than directly diagonalizing the Fibonacci matrix.
@@ -83,8 +83,8 @@ Although the Fibonacci matrix itself is not orthogonal, the **Fourier method (FF
 | **Core object** | $G(x) = \frac{P(x)}{Q(x)}$ | $M = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix}$ | $F_N$ (DFT matrix) |
 | **Key quantity** | **Poles** (denominator roots) | **Eigenvalues** ($\lambda$) | **Roots of unity** ($e^{i 2\pi/N}$) |
 | **Relation** | Reciprocals of poles are contributing eigenvalues | **Eigenvalues determine growth rate** | **Orthogonal basis for expansion/convolution** |
-| **Inverse matrix** | Partial fraction decomposition | $P^{-1}=P^T$ in this example | $U^{-1} = U^H$ (conjugate transpose) |
-| **Applicability** | All linear recurrences | All linear recurrences | Only circular convolution or specific extraction |
+| **Recovery step** | Partial fractions and coefficient extraction | $P^{-1}=P^T$ in this example | $U^{-1} = U^H$ (conjugate transpose) |
+| **Applicability here** | Constant-coefficient linear recurrences have rational generating functions | Constant-coefficient linear recurrences have a fixed transition matrix, with Jordan form available when it is defective | Convolution and coefficient filtering |
 | **Applicable to Fibonacci?** | **Yes** (perfect match) | **Yes** (perfect match) | Useful for coefficient filtering |
 
 

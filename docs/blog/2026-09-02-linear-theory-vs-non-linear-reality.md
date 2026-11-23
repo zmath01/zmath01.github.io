@@ -2,13 +2,13 @@
 
 ## 1. Overview
 
-// 1. The difficulty of axiomatization = the difficulty of the number of scale layers. The analyzable scale window has expanded from $\sim 10^{2}$ to $\sim 10^{60}$, with inter-layer coupling; a single axiomatic system cannot span micro-meso-macro; **each layer needs its own effective theory (Wilson EFT) + connection theorem (Hilbert VI problem / Renormalization Group)**. "The more modern, the harder" is not a generational effect — it is the growth in the "number of distinct scale layers that must be explicitly connected."
+// 1. Multiscale models can be difficult to connect. Effective theories describe behavior at selected scales, and renormalization-group or limit theorems can explain how those descriptions are related.
 
 // 2. The claim "linear = cheap" requires a triple correction:
 
-- ( a ) Linear equations ≠ low complexity — Schrödinger is linear but its simulation is BQP-hard, and the Ising partition function is #P-hard;
-- ( b ) The rigorous version of "bits cheap / atoms expensive" is **Landauer** (erasure costs $kT\ln 2$, logically reversible copying is not subject to that particular erasure bound) + the quantum no-cloning theorem;
-- ( c ) it-from-qubit / AdS/CFT provides a legitimate mathematical form of "gravitational non-linearity = boundary state-preparation complexity" (Ryu–Takayanagi area = entanglement entropy; complexity = action; black hole = maximal-complexity state), **but it holds only in holographic settings**.
+- ( a ) Linearity alone places no useful bound on computational complexity. Particular quantum scattering problems and exact Ising partition-function problems are computationally hard.
+- ( b ) Landauer’s bound applies to resetting an unbiased bit in the standard ideal memory model. The quantum no-cloning theorem concerns copying an arbitrary unknown quantum state.
+- ( c ) In holographic settings, area formulas describe certain entanglement entropies. Proposals relating gravitational observables to circuit complexity remain conjectural.
 
 // 3. Agriculture → Aristocracy → Theoretical Science:
 
@@ -22,7 +22,7 @@ Linearity vs. non-linearity in physics
 Bits vs. atoms in information
 Surplus leisure vs. inequality externalities in economics
 Generation vs. verification of knowledge
-— are projections of the same "cost asymmetry" law at different scales: low-entropy structures (theory / aristocracy / order / axioms) must pay entropy elsewhere (experiment / peasants / chaos / trial-and-error) in order to be sustained;
+— illustrate different kinds of cost asymmetry. The thermodynamic language is an analogy when applied to institutions, theories, or the growth of knowledge.
 
 For the first time in 2026, AI has made "verification" — the most expensive low-entropy process — scalable, at the cost that we must now start auditing the auditors.
 
@@ -41,29 +41,29 @@ Theory = equivalence classes organized by scale, each layer having its own effec
 The precise statement of why QFT is hard to axiomatize:
 
 - Formal perturbation theory is fine (Feynman diagrams, finite renormalization);
-- Non-perturbative existence of 4D interacting QFT = unsolved (Yang–Mills mass gap, Clay);
+- Existence of a nontrivial four-dimensional quantum Yang–Mills theory with a positive mass gap remains a [Millennium Prize problem](https://www.claymath.org/millennium/yang-mills-the-maths-gap/).
 - Constructive QFT includes low-dimensional examples such as $\phi^4_3$;
 - Haag’s theorem obstructs the usual interaction picture that relates free and interacting relativistic fields by a unitary at a fixed time, under its hypotheses.
 
-The "measurement scale expands" hypothesis is upgraded to: the analyzable scale window (ratio $\ell_{\text{macro}}/\ell_{\text{micro}}$) has expanded from $\sim 10^{2}$ in the agricultural era to $\sim 10^{60}$ today ($10^{-35}\,\text{m}$ to $10^{26}\,\text{m}$), with inter-layer coupling → a single closed axiomatic system cannot span micro-meso-macro, and each level needs its own effective theory + connection theorem. Deng–Hani–Ma is precisely a rigorous connection theorem for this chain (Newton → Boltzmann → Euler/NSF); whereas the Clay NS problem is about "well-posedness of the equations themselves", pointing in the opposite direction. The two problems constitute the two ends of modern mathematical physics: where the equations come from / whether the equations are well-posed.
+The "measurement scale expands" hypothesis concerns the range of scales that a model must connect. For example, the ratio of the illustrative lengths $10^{26}\,\text{m}$ and $10^{-35}\,\text{m}$ is $10^{61}$. These scales do not define an experimentally validated window or determine how many theories are needed. As a rigorous example of a connection between scales, Deng–Hani–Ma derive the compressible Euler and incompressible Navier–Stokes–Fourier equations for hard-sphere systems on two- and three-dimensional tori, under prescribed initial data and scaling limits, via the Boltzmann equation. The Clay Navier–Stokes problem asks a separate question about existence and smoothness. [Deng–Hani–Ma, Theorems 1–3](https://arxiv.org/abs/2503.01800v1)
 
 ### 2.2 "Quantization is linear / information propagation is cheap / GR is non-linear / moving atoms is expensive"
 
 Yau's argument (QM linear spectral analysis vs. GR non-linear PDE), but the claim "linear = cheap" requires a triple correction:
 
-**(1) Linear equations ≠ low computational complexity.** The Schrödinger equation is linear, but the dimension of the state space grows exponentially with the number of particles: $2^{n}$ amplitudes. Simulating quantum many-body systems is BQP-hard (Jordan–Lee–Preskill); Ising / partition-function counting is #P-hard (Barahona; Vertigan–Welsh). So the "cheapest equation" describes the "most expensive system." The rise of deep learning is precisely "linear algebra winning at scale" (matrix multiplication, attention is bilinear), yet it approximates non-linear functions through composition — a linear computational skeleton + a non-linear data distribution.
+**(1) Linear equations can still be computationally hard.** A generic pure state of $n$ qubits has $2^n$ complex amplitudes in a product basis. A specified scattering problem for scalar quantum field theory with classical sources is BQP-complete. Exact evaluation of the Ising partition function on general graphs is #P-hard for certain coupling choices. In a Transformer, $QK^T$ is bilinear in $Q$ and $K$, and softmax makes the resulting attention map nonlinear. [Jordan et al.](https://arxiv.org/abs/1703.00454) [Welsh and Merino](https://doi.org/10.1016/S0378-4371(01)00445-9)
 
 **(2) The physical basis for "bits cheap / atoms expensive":**
 
 - Landauer's principle: resetting one unbiased bit releases at least $k_B T\ln 2$ of heat to a bath at temperature $T$ in the standard ideal model. Actual copying and communication still have physical costs.
-- Quantum no-cloning theorem: an unknown quantum state cannot be perfectly copied → classical data and states drawn from a known orthogonal basis can be copied. The fiber-optic internet copies classical information; moving an atom = having to erase the original location = paying entropy. "Cheap information propagation vs. expensive matter transport" has a rigorous thermodynamic / quantum-information version.
+- The quantum no-cloning theorem rules out a universal operation that perfectly copies an arbitrary unknown quantum state. States from a known orthogonal basis can be copied. Moving a particle can be a reversible evolution and does not itself constitute a logical reset.
 
 **(3) it-from-qubit / AdS/CFT:** "Is non-linear gravity = high computational complexity?" The duality provides concrete results about some entanglement observables and motivates conjectures about complexity. It does not establish this general equality.
 
-- The bulk geometry ↔ boundary entanglement structure (Ryu–Takayanagi: area = entanglement entropy; ER = EPR; tensor networks).
-- Black hole = maximal-complexity state (fastest scrambler); complexity growth ~ action (complexity = action/volume, Brown–Susskind, Stanford–Susskind).
-- "The heaviness and immovability of atoms (high energy / high complexity)" ↔ the circuit depth / resources required to prepare that state on the boundary;
-- "Low cost of bit propagation" ↔ the propagation of entanglement / information can be accomplished on the boundary at polynomial cost. But a caveat must be added: the duality holds rigorously only in specific backgrounds (AdS-like spacetimes), not as a universal theorem.
+- The Ryu–Takayanagi prescription relates the leading holographic entanglement entropy of a boundary region to $\operatorname{Area}(\gamma_A)/(4G_N)$ in units with $\hbar=1$, using the corresponding minimal bulk surface in a static setting. [Ryu and Takayanagi](https://arxiv.org/abs/hep-th/0603001)
+- The fast-scrambling conjecture concerns how quickly initially localized information spreads. The complexity–action and complexity–volume proposals concern different quantities and are conjectural. [Sekino and Susskind](https://arxiv.org/abs/0808.2096) [Brown et al.](https://arxiv.org/abs/1509.07876)
+- Circuit complexity measures state-preparation cost relative to a specified reference state and gate set.
+- These proposals concern specific holographic models. Energy, transport costs, and circuit complexity are distinct quantities.
 
 ### 2.3 Agricultural Society → Aristocracy → Theoretical Mathematics and Theoretical Science (Hypothesis 2, "Negative Entropy")
 
@@ -111,7 +111,7 @@ Here $c$ is the individual absorption rate, $L$ is lifespan, and the number of f
 
 - **Mechanistic innovation in the reproducibility challenge:** claims extraction → built-in agent reproduction → public logbook → human judges treat the logbook's self-assessment as untrustworthy → auditing the audit. This is the first step in bringing "procedural justice" into scientific verification: shifting from "trusting reviewers" to "auditable automated reproduction."
 
-- **Case:** The Jacobian counterexample (released 2026-07-19, compiled by Gao on 07-31, no peer review) and Alpöge's manuscript on a complex structure for $S^{6}$ (108 pages, unverified) are both in a state of "claims already propagated, verification lagging behind" — the doubt ("can someone with a number-theory background check complex geometry?") is precisely the everyday form of the verification crisis. Ironically: the geometric mechanism of the Jacobian counterexample (tangent sweep, Speyer) is "pure mathematics," while the Gröbner-basis computation needed to verify it is "mechanized" — verification increasingly resembles computation, and computation increasingly resembles verification.
+- **Case:** Two examples of how mathematical claims circulate before readers can verify them are the 2026 polynomial-map counterexamples to the Jacobian conjecture in dimension three and the manuscript proposing a complex structure on the six-sphere. Gao’s revised preprint gives explicit examples in higher dimensions and explains the tangent-sweep construction. [Gao, arXiv v2](https://arxiv.org/abs/2608.00222v2)
 
 ## 3. Deep Connections
 
@@ -119,8 +119,8 @@ Unifying thread: all the fragments of this article (the difficulty of axiomatiza
 
 | Layer | Cost characteristic |
 | :--- | :--- |
-| Information (bits) | Fast generation, copying nearly free (Landauer only penalizes erasure), linear propagation |
-| Matter (atoms) | Expensive generation, expensive movement (erasure pays entropy), expensive trial-and-error |
+| Information (bits) | Resetting an unbiased bit has a thermodynamic cost in the ideal memory model. Copying and communication costs depend on the implementation. |
+| Matter (atoms) | Transport costs depend on the physical process, required work, and dissipation. |
 | Understanding (human brain) | Constant absorption rate, finite lifespan, scarce attention (Simon: information abundance → attention poverty) |
 | Verification (peers) | Linear supply, super-exponential demand, already broken in 2026 (ICML figures) |
 

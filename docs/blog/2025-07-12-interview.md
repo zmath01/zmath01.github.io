@@ -82,7 +82,7 @@ For general graph traversal, visited-node bookkeeping can take $O(V)$ space.
 
 - **Underlying principle**: array + hash function (such as modulus), conflict resolution (open addressing, chain address method).
 - **Time complexity**:
-- Insert/delete/search: average O(1), worst O(n) (when hash conflict is serious).
+- Insert, delete, and lookup take expected $O(1)$ time with well-distributed hashes and a bounded load factor. Insertions that can resize the table have an amortized bound. A single operation can take $O(n)$.
 - Go’s built-in `map` is a hash table. The runtime introduced a [Swiss Table implementation in Go 1.24](https://go.dev/blog/swisstable).
 - **C++'s `unordered_map`**: implemented based on hash buckets.
 
@@ -118,12 +118,12 @@ For general graph traversal, visited-node bookkeeping can take $O(V)$ space.
 #### **9. Virtual memory**
 
 - **Function**:
-- Expand available memory (through disk swap).
+- Present each process with a virtual address space. The operating system can back some pages with swap or memory-mapped files.
 - Isolate process address space (improve security).
 - **Core mechanism**:
-- **Paging**: Memory is divided into fixed-size pages (such as 4KB), managed by MMU.
+- **Paging**: The MMU translates virtual pages into physical page frames using mappings managed by the operating system. A system can support more than one page size.
 - **Page table**: Records the mapping of virtual pages to physical pages.
 - **Page fault interrupt**: A fault can require allocating a new page, loading a page from storage, or rejecting an invalid access.
 - **Advantages**:
-- Allows running programs larger than physical memory.
-- Avoid memory conflicts between processes.
+- Demand paging can run a program whose virtual address space exceeds physical memory.
+- Address-space isolation protects private mappings between processes. The operating system can also provide explicit shared mappings.

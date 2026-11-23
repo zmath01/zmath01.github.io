@@ -21,17 +21,14 @@ def binary_search_iterative(arr: list, target) -> int:
     """
     Performs binary search on a sorted list iteratively.
     
-    :param arr: A sorted list of elements
+    :param arr: A list sorted in ascending order with comparable elements
     :param target: The element to search for
-    :return: The index of the target if found, otherwise -1
+    :return: An index of the target if found, otherwise -1
     """
     left, right = 0, len(arr) - 1
 
     while left <= right:
-        # Calculate mid index safely to avoid potential overflow in other languages
-        # In Python, integers have arbitrary precision, so this is less critical,
-        # but it's good practice.
-        mid = (left + right) // 2
+        mid = left + (right - left) // 2
         
         if arr[mid] == target:
             return mid
@@ -47,16 +44,16 @@ def binary_search_recursive(arr: list, target) -> int:
     """
     Performs binary search on a sorted list recursively.
     
-    :param arr: A sorted list of elements
+    :param arr: A list sorted in ascending order with comparable elements
     :param target: The element to search for
-    :return: The index of the target if found, otherwise -1
+    :return: An index of the target if found, otherwise -1
     """
     
     def _helper(left, right):
         if left > right:
             return -1
         
-        mid = (left + right) // 2
+        mid = left + (right - left) // 2
         
         if arr[mid] == target:
             return mid
@@ -101,7 +98,7 @@ This warning is critical in languages like **C, C++, Java, or Go**, where intege
 If `left` and `right` are both large (e.g., near `2^31 - 1`), their sum can exceed the maximum value an `int` can hold, causing **integer overflow**. Signed overflow is undefined in C and C++. Java and Go define the overflow result for their integer types.
 
 ### Safe Calculation (Language-Agnostic Best Practice)
-To be safe across all languages and follow best practices, you can calculate `mid` without adding the two large numbers directly:
+For nonnegative array indices satisfying `left <= right`, both implementations use a form whose intermediate values fit whenever the indices fit.
 
 ```python
 mid = left + (right - left) // 2

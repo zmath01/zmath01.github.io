@@ -51,7 +51,7 @@ $$v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$$
 A larger second moment reduces the multiplier on the first moment, holding the other quantities fixed. The actual update depends on both moments.
 
 ### 4. Bias Correction
-Since $m_t$ and $v_t$ are initialized as vectors of zeros, they are biased towards zero, especially during the initial time steps (when $t$ is small). Adam corrects this bias:
+Adam initializes $m_0=v_0=0$. If the gradient moments are constant across steps, zero initialization scales their expected estimates by $1-\beta_1^t$ and $1-\beta_2^t$, respectively. Adam divides out these factors:
 
 $$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$$
 
@@ -116,7 +116,7 @@ $$\mathbf{y} = \mathcal{F}(\mathbf{x}, \{W_i\}) + \mathbf{x}$$
 The paper posits that instead of approximating a desired underlying mapping $\mathcal{H}(\mathbf{x})$ directly, the network approximates the residual $\mathcal{F}(\mathbf{x}) = \mathcal{H}(\mathbf{x}) - \mathbf{x}$. Thus, the original mapping becomes $\mathcal{H}(\mathbf{x}) = \mathcal{F}(\mathbf{x}) + \mathbf{x}$.
 
 ### 2. The Two-Layer Residual Block Expansion
-For the specific case of a block with two layers (the most common configuration in the paper), the residual function $\mathcal{F}$ is expanded as:
+For the basic block with two layers, used in ResNet-18 and ResNet-34, the residual function $\mathcal{F}$ is expanded as:
 
 $$\mathcal{F}(\mathbf{x}) = W_2 \sigma(W_1 \mathbf{x})$$
 
@@ -198,28 +198,28 @@ $$H_x(y) = h + \sum_i h_i y_i + \sum_{i \le j} h_{ij} y_i y_j + \sum_{i \le j \l
 The paper argues that physical laws typically involve only low-order terms (usually up to degree 2, 3, or 4), motivating low-degree models. This is a modeling assumption and does not imply rapid convergence for arbitrary likelihoods.
 
 ### 3. Neural Network Approximation of Multiplication
-A key mathematical hurdle is showing that neurons can perform multiplication (required for the $y_i y_j$ terms) using only addition and non-linear activation. The authors derive an approximation for multiplication $m(u, v) \approx uv$ using a smooth activation function $\sigma$ with nonzero quadratic coefficient at the expansion point, such as softplus at zero.
+A key mathematical hurdle is showing that neurons can perform multiplication (required for the $y_i y_j$ terms) using only addition and non-linear activation. The authors derive an approximation for multiplication $m(u, v) \approx uv$ using a smooth activation function $\sigma$ with $\sigma^{\prime\prime}(0)\ne0$, such as softplus.
 
-$$m(u, v) = \frac{\sigma(u+v) + \sigma(-u-v) - \sigma(u-v) - \sigma(-u+v)}{8\sigma_2}$$
+$$m(u, v) = \frac{\sigma(u+v) + \sigma(-u-v) - \sigma(u-v) - \sigma(-u+v)}{4\sigma^{\prime\prime}(0)}$$
 
 *   **$m(u, v)$**: The constructed function that approximates the product $uv$.
 *   **$\sigma(\cdot)$**: The non-linear activation function of the neuron.
 *   **$u, v$**: Scaled input variables.
-*   **$\sigma_2$**: The second-order coefficient in the Taylor expansion of $\sigma(x) \approx \sigma_0 + \sigma_1 x + \sigma_2 x^2 + \dots$. This term must be non-zero for the approximation to work.
-*   **$8\sigma_2$**: A normalization factor derived from the Taylor series algebra to isolate the $uv$ term.
+*   **$\sigma^{\prime\prime}(0)$**: The second derivative at the expansion point. The coefficient of $x^2$ in the Taylor expansion is $\sigma^{\prime\prime}(0)/2$.
+*   **$4\sigma^{\prime\prime}(0)$**: A normalization factor derived from the Taylor series algebra to isolate the $uv$ term.
 
-The numerator has leading term $8\sigma_2uv$. To approximate multiplication uniformly on a bounded input domain, evaluate the expression at $(hu,hv)$ and divide by $h^2$, then take $h\to 0$. Composing such approximations gives polynomial approximations on bounded domains.
+The numerator has leading term $4\sigma^{\prime\prime}(0)uv$. To approximate multiplication uniformly on a bounded input domain, evaluate the expression at $(hu,hv)$ and divide by $h^2$, then take $h\to 0$. Composing such approximations gives polynomial approximations on bounded domains.
 
 ### 4. Vector Notation for Softmax
 When dealing with discrete classes, the probability distribution is often written in vector notation, equating the Boltzmann form to the softmax function used in deep learning.
 
-$$\mathbf{p}(\mathbf{x}) = \boldsymbol{\sigma}[-\mathbf{H}(\mathbf{x}) - \boldsymbol{\mu}]$$
+$$\mathbf{p}(y) = \boldsymbol{\sigma}[-\mathbf{H}(y) - \boldsymbol{\mu}]$$
 
-*   **$\mathbf{p}(\mathbf{x})$**: A vector where each element is the probability $p(x|y)$ for a specific class $x$.
+*   **$\mathbf{p}(y)$**: A vector where each element is the probability $p(x|y)$ for a specific class $x$.
 *   **$\boldsymbol{\sigma}$**: The softmax function applied to a vector, defined as $\sigma(\mathbf{z})_i = \frac{e^{z_i}}{\sum_j e^{z_j}}$.
-*   **$\mathbf{H}(\mathbf{x})$**: A vector of Hamiltonians for each class.
+*   **$\mathbf{H}(y)$**: A vector with one entry $H_x(y)$ per class $x$.
 *   **$\boldsymbol{\mu}$**: A vector of prior terms for each class.
-*   **$-\mathbf{H}(\mathbf{x}) - \boldsymbol{\mu}$**: The input logit vector to the softmax layer, representing the negative energy of each state.
+*   **$-\mathbf{H}(y) - \boldsymbol{\mu}$**: The input logit vector to the softmax layer, representing the negative energy of each state.
 
 ### 5. Hierarchical Composition
 The paper describes deep networks as a composition of functions, reflecting the hierarchical structure of physical data.
@@ -248,7 +248,7 @@ https://arxiv.org/abs/1706.03762
 The paper **"Attention Is All You Need"** by Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, and Illia Polosukhin (arXiv:1706.03762) introduces the Transformer architecture. The mathematics defines how the model processes sequences using attention mechanisms rather than recurrence.
 
 ### 1. Scaled Dot-Product Attention
-This is the fundamental operation of the Transformer, replacing recurrent layers.
+This is the Transformer’s unmasked attention operation. Decoder self-attention masks out future positions in the score matrix before applying softmax.
 
 $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
@@ -280,10 +280,10 @@ $$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
 *   **$W_i^Q$**: The learnable weight matrix projecting $Q$ for the $i$-th head. Dimensions: $d_{\text{model}} \times d_k$.
 *   **$W_i^K$**: The learnable weight matrix projecting $K$ for the $i$-th head. Dimensions: $d_{\text{model}} \times d_k$.
 *   **$W_i^V$**: The learnable weight matrix projecting $V$ for the $i$-th head. Dimensions: $d_{\text{model}} \times d_v$.
-*   **$QW_i^Q, KW_i^K, VW_i^V$**: The projected Query, Key, and Value matrices specific to head $i$. Each head operates in a lower-dimensional subspace ($d_k = d_v = d_{\text{model}}/h$).
+*   **$QW_i^Q, KW_i^K, VW_i^V$**: The projected Query, Key, and Value matrices specific to head $i$. In the original Transformer, $d_k = d_v = d_{\text{model}}/h$.
 
 ### 3. Positional Encodings
-Since the Transformer contains no recurrence or convolution, it requires explicit injection of position information using sine and cosine functions.
+The original Transformer adds positional information to the token embeddings using paired sine and cosine functions. The authors also tested learned positional embeddings.
 
 $$PE_{(\text{pos}, 2i)} = \sin\left(\frac{\text{pos}}{10000^{2i/d_{\text{model}}}}\right)$$
 
@@ -296,10 +296,10 @@ $$PE_{(\text{pos}, 2i+1)} = \cos\left(\frac{\text{pos}}{10000^{2i/d_{\text{model
 *   **$2i+1$**: Odd indices of the embedding vector. These are assigned the cosine function.
 *   **$d_{\text{model}}$**: The dimension of the model's embedding space (e.g., 512).
 *   **$10000$**: A scaling constant chosen to create a geometric progression of wavelengths.
-*   **$10000^{2i/d_{\text{model}}}$**: The denominator determining the wavelength for dimension $i$. It forms a geometric progression from $2\pi$ to $10000 \cdot 2\pi$.
+*   **$10000^{2i/d_{\text{model}}}$**: The denominator determining the wavelength for dimension $i$. The wavelengths are $2\pi\cdot 10000^{2i/d_{\text{model}}}$. For even $d_{\text{model}}$, the longest wavelength is $2\pi\cdot10000^{1-2/d_{\text{model}}}$.
 *   **$\sin, \cos$**: The sine and cosine trigonometric functions.
 
-The final input to the encoder/decoder is the sum of the token embedding $E_{\text{token}}$ and the positional encoding: $x = E_{\text{token}} + PE$. This design allows the model to easily learn to attend to relative positions because $PE_{\text{pos}+k}$ can be represented as a linear function of $PE_{\text{pos}}$ for any fixed offset $k$.
+The encoder and decoder add the positional encoding to the scaled token embedding, giving $x=\sqrt{d_{\text{model}}}\,E_{\text{token}}+PE$ before dropout. For a fixed offset $k$, each sine–cosine pair at $\text{pos}+k$ is a rotation of the corresponding pair at $\text{pos}$, making relative position available through a linear map.
 
 ### 4. Feed-Forward Network (Position-wise)
 Each position in the encoder and decoder stacks contains a fully connected feed-forward network applied independently to each position.

@@ -21,12 +21,12 @@ An ordered array also supports efficient range searches. Its main disadvantage f
 
 ### Why Do Inserts/Updates Slow Down?
 
-The "side effect" of indexes is essentially **"data modifications require synchronous maintenance of the integrity of the B+ Tree"**, not a characteristic of arrays:
+Indexes add work when data changes. In InnoDB, the clustered index stores the rows, and secondary indexes store their own entries.
 
 1. When inserting/updating data, you need to do two things:
-   - Step 1: Modify the row data of the MySQL data table itself (this step is the same as without indexes);
-   - Step 2: Synchronously update the corresponding index B+ Tree — because B+ Trees require maintaining order and balance at all times. Inserting a new value may require **splitting nodes**, deleting a value may require **merging nodes**, and updating a value may require adjusting node positions. These operations all add additional computational and I/O overhead.
-2. The more indexes there are, the greater the overhead: An insert typically adds an entry to each applicable index. An update to a non-indexed column generally does not require changing secondary index entries.
+   - Insert or update the row in the clustered index. InnoDB maintains a clustered index even when the table has no explicit primary key.
+   - Maintain affected secondary indexes. Inserts can split pages, and deletes can lead to page merges. When change buffering is enabled and applicable, InnoDB can defer merging changes into secondary index pages. [InnoDB change buffer](https://dev.mysql.com/doc/refman/8.4/en/innodb-change-buffer.html)
+2. The more indexes there are, the greater the overhead: An insert typically adds an entry to each applicable index. A change to a secondary key or to the primary-key value stored in its entry can require updating the secondary index.
 
 Supplement: Arrays Are Only Used for "Local Storage" in Indexes, Not as the Core Structure
 Inside a single node of a B+ Tree, an **ordered array** is used to store key values (e.g., storing index values such as `[10,20,30]` in one node). However, this is only a detail inside the node. The core logic of the entire index is the "balanced multi-way search" of the B+ Tree, not the linear storage of arrays.

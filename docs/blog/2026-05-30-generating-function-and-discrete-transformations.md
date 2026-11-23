@@ -13,9 +13,9 @@ In signal processing, the process of transforming a discrete sequence $a_n$ (tim
 | **Ordinary generating function (OGF)** | $A(x) = \sum_{n=0}^{\infty} a_n x^n$ | $x = z^{-1}$ | Z-transform of a discrete sequence (reciprocal variable) |
 | **Z-transform (Z-Transform)** | $X(z) = \sum_{n=0}^{\infty} x[n] z^{-n}$ | $z = x^{-1}$ | Discrete version of the Laplace transform |
 | **Laplace transform** | $F(s) = \int_{0}^{\infty} f(t) e^{-st} dt$ | $z = e^{sT}$ for a sampled impulse train | Complex frequency-domain analysis of continuous signals |
-| **Fourier transform (DTFT)** | $X(e^{i\omega}) = \sum x[n] e^{-i\omega n}$ | $z = e^{i\omega}$ | Special case of the Z-transform on the unit circle |
+| **Fourier transform (DTFT)** | $X(e^{i\omega}) = \sum_{n=0}^{\infty} x[n] e^{-i\omega n}$ | $z = e^{i\omega}$ | Special case of the Z-transform on the unit circle |
 
-*   **Discrete vs continuous**: Generating functions deal with discrete sequences $\{a_n\}$ (corresponding to discrete signals), whereas Laplace/Fourier typically handle continuous functions $f(t)$ (corresponding to continuous signals).
+*   **Discrete vs continuous**: Generating functions deal with discrete sequences $\{a_n\}$ (corresponding to discrete signals), whereas the integral Laplace and continuous Fourier transforms act on functions $f(t)$ (corresponding to continuous signals).
 *   **Summation vs integration**: Generating functions use series summation $\sum$, while Laplace uses integration $\int$. This is the fundamental distinction between discrete and continuous.
 
 ## 2. Detailed correspondence analysis
@@ -25,11 +25,11 @@ In signal processing, the process of transforming a discrete sequence $a_n$ (tim
 *   **Unified form**:
     *   Generating function: $A(x) = a_0 + a_1 x + a_2 x^2 + \dots$
     *   Z-transform: $X(z) = x[0] + x[1] z^{-1} + x[2] z^{-2} + \dots$
-    *   With $x=z^{-1}$ and $a_n=x[n]$, the analytic functions agree on the corresponding region of convergence. Writing $z=e^{sT}$ gives $\sum_{n\ge0}a_n e^{-snT}$, the Laplace transform of the impulse train $\sum_{n\ge0}a_n\delta(t-nT)$. The latter depends on the samples.
+    *   With $x=z^{-1}$ and $a_n=x[n]$, the analytic functions agree on the corresponding region of convergence. Writing $z=e^{sT}$ gives $\sum_{n\ge0}a_n e^{-snT}$, the Laplace transform of the impulse train $\sum_{n\ge0}a_n\delta(t-nT)$. This identity applies to the impulse train. Sampling a continuous function does not in general preserve its Laplace transform.
 *   **Physical meaning**:
     *   In control theory, the region of convergence of the impulse-response Z-transform determines BIBO stability. It must contain the unit circle. For a causal rational system the poles must lie inside that circle.
     *   In combinatorics, the location of the **singularities** of the generating function $A(x)$ determines the **asymptotic growth rate** of the sequence $a_n$ (e.g., $a_n\sim C R^{-n}$ for a suitable unique dominant simple pole at $x=R$).
-    *   **Conclusion**: Analyzing the singularities of a generating function is, in essence, performing pole analysis of a discrete system.
+    *   **Conclusion**: For rational generating functions this is a pole analysis. More general generating functions can have other singularities, such as branch points.
 
 ### Generating function $\leftrightarrow$ Fourier transform
 
@@ -44,13 +44,13 @@ In signal processing, the process of transforming a discrete sequence $a_n$ (tim
 
 ## 3. Mapping of operational properties
 
-This correspondence is not limited to definitions; the operational properties are also completely isomorphic:
+The substitution also transports these operations, wherever the respective analytic transforms exist.
 
 | Operation | Generating function (combinatorics) | Z/Fourier transform (signal processing) | Intuitive explanation |
 | :--- | :--- | :--- | :--- |
 | **Convolution** | $C(x) = A(x) \cdot B(x)$ $\implies c_n = \sum a_k b_{n-k}$ | Time-domain convolution $\leftrightarrow$ frequency-domain multiplication | Polynomial multiplication is convolution |
 | **Shift/delay** | $x^k A(x)$ (coefficients shifted right) | $z^{-k} X(z)$ (time delay) | Multiplying by a power corresponds to a time shift |
-| **Differentiation** | $x A'(x)$ (yields $n \cdot a_n$) | $-zX^\prime(z)$ for the Z-transform, or $i\frac{d}{d\omega}X(e^{i\omega})$ when termwise differentiation is valid | Weighted operation |
+| **Index weighting** | $x A'(x)$ (yields $n \cdot a_n$) | $-zX^\prime(z)$ for the Z-transform, or $i\frac{d}{d\omega}X(e^{i\omega})$ when termwise differentiation is valid | Weighted operation |
 | **Initial value** | $A(0) = a_0$ | Initial value theorem $\lim_{z\to\infty} X(z) = x[0]$ | Determines the starting value |
 
 ## 4. Why is this perspective useful?
@@ -61,10 +61,10 @@ Viewing generating functions as "discrete Fourier/Laplace transforms" is more th
     Using complex analysis (analytic combinatorics), by studying the **distribution of singularities** of the generating function in the complex plane (similar to pole analysis in control theory), one can directly obtain the growth behavior of $a_n$ as $n \to \infty$. This is an advanced method for analyzing algorithmic complexity.
 
 2.  **Fast algorithms (FFT)**:
-    Polynomial multiplication (multiplying generating functions) is naively $O(n^2)$, but using the viewpoint that "a generating function is a frequency-domain signal," **FFT** can accomplish it in $O(n \log n)$ time. This is essentially multiplying first in the "frequency domain" (point-value representation), then inverse-transforming back to the "time domain" (coefficient representation).
+    Polynomial multiplication (multiplying generating functions) is naively $O(n^2)$, but using the viewpoint that "a generating function is a frequency-domain signal," **FFT** can accomplish it in $O(n \log n)$ time. Pad the coefficient arrays to at least the sum of the two degrees plus one to recover the ordinary product from the circular convolution. The FFT evaluates at roots of unity, multiplication is pointwise, and the inverse FFT recovers the coefficients up to numerical error.
 
 3.  **Solving for closed-form formulas**:
-    Using partial fraction decomposition, a complex generating function is broken down into a polynomial plus terms of the form $C/(1-ax)^j$, which corresponds to decomposing a system into a parallel connection of first-order subsystems in signal processing.
+    Over the complex numbers, a rational generating function regular at the origin decomposes into a polynomial and terms $C/(1-ax)^j$. The case $j=1$ corresponds to a first-order section, and $j>1$ corresponds to a cascade of $j$ first-order sections.
 
 ## Summary
 
